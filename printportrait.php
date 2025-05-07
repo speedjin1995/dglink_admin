@@ -7,6 +7,8 @@ $compname = 'SYNCTRONIX TECHNOLOGY (M) SDN BHD';
 $compaddress = 'No.34, Jalan Bagan 1, Taman Bagan, 13400 Butterworth. Penang. Malaysia.';
 $compphone = '6043325822';
 $compiemail = 'admin@synctronix.com.my';
+$compfax = '';
+$compwebsite = '';
 
 $mapOfWeights = array();
 $mapOfBirdsToCages = array();
@@ -105,7 +107,7 @@ function rearrangeList($weightDetails) {
 if(isset($_GET['userID'])){
     $id = $_GET['userID'];
 
-    if ($select_stmt = $db->prepare("select weighing.*, farms.name FROM weighing, farms WHERE weighing.farm_id = farms.id AND weighing.id=?")) {
+    if ($select_stmt = $db->prepare("select weighing.* FROM weighing, farms WHERE weighing.id=?")) {
         $select_stmt->bind_param('s', $id);
 
         if (! $select_stmt->execute()) {
@@ -133,6 +135,24 @@ if(isset($_GET['userID'])){
                 rearrangeList($weightData);
                 $weightTime = json_decode($row['weight_time'], true);
                 $userName = "Pri Name";
+                
+                $stmtcomp = $db->prepare("SELECT * FROM companies WHERE id=?");
+                $stmtcomp->bind_param('s', $row['company']);
+                $stmtcomp->execute();
+                $resultc = $stmtcomp->get_result();
+                        
+                if ($rowc = $resultc->fetch_assoc()) {
+                    $compname = $rowc['name'];
+                    $compreg = $rowc['reg_no'] ?? '';
+                    $compaddress = $rowc['address'];
+                    $compaddress2 = $rowc['address2'] ?? '';
+                    $compaddress3 = $rowc['address3'] ?? '';
+                    $compaddress4 = $rowc['address4'] ?? '';
+                    $compphone = $rowc['phone'] ?? '';
+                    $compfax = $rowc['fax'] ?? '';
+                    $compiemail = $rowc['email'] ?? '';
+                    $compwebsite = $rowc['website'] ?? '';
+                }
 
                 if($row['weighted_by'] != null){
                     if ($select_stmt2 = $db->prepare("select * FROM users WHERE id=?")) {
@@ -148,6 +168,9 @@ if(isset($_GET['userID'])){
                         }
                     }
                 }
+                
+                $companyNameUpper = strtoupper($compname);
+                $showInlineReg = strlen($compname) <= 20;
 
                 $message = '<html>
     <head>
@@ -260,12 +283,40 @@ if(isset($_GET['userID'])){
             <table class="table">
                 <tbody>
                     <tr>
-                        <td style="width: 100%;border-top:0px;text-align:center;"><img src="https://ccb.syncweigh.com/assets/header.png" width="100%" height="auto" /></td>
+                        <td style="width: 60%;border-top: 0px;">
+                            <p>';
+                                if ($showInlineReg) {
+                                    $message .= '
+                                                    <span style="font-weight: bold; font-size: 18px;">' . $companyNameUpper . '</span>
+                                                    <span style="font-size: 12px;"> ' . $compreg . '</span><br>';
+                                } else {
+                                    $message .= '
+                                                    <span style="font-weight: bold; font-size: 18px;">' . $companyNameUpper . '</span><br>
+                                                    <span style="font-size: 12px;">' . $compreg . '</span><br>';
+                                }
+                                
+                                // Address & contact info
+                                $message .= '
+                                <span style="font-size: 14px;">' . $compaddress . ' ' . ($compaddress2 ?? '') . '</span><br>
+                                <span style="font-size: 14px;">' . ($compaddress3 ?? '') . ' ' . ($compaddress4 ?? '') . '</span><br>
+                                <span style="font-size: 14px;">Tel: ' . ($compphone ?? '') . '  Fax: ' . ($compfax ?? '') . '</span><br>
+                                <span style="font-size: 14px;">Email: ' . ($compiemail ?? '') . '</span><br>';
+            if (!empty($compwebsite)) {
+                $message .= '<span style="font-size: 14px;">Website: ' . $compwebsite . '</span>';
+            }
+            $message .= '
+                            </p>
+                        </td>
+                        <td style="vertical-align: top; text-align: right;border-top: 0px;">
+                            <p style="margin-left: 50px;">
+                                <span style="font-size: 20px; font-weight: bold;">DELIVERY ORDER</span><br>
+                            </p>
+                        </td>
                     </tr>
                 </tbody>
-            </table><br>
+            </table><br>';
             
-            <table class="table">
+            $message .= '<table class="table">
                 <tbody>
                     <tr>
                         <td style="width: 50%;border-top:0px;padding: 0 0.7rem;">';
@@ -273,13 +324,22 @@ if(isset($_GET['userID'])){
                         $message .= '<p>
                             <span style="font-size: 14px;font-family: sans-serif;font-weight: bold;">Customer : </span>
                             <span style="font-size: 14px;font-family: sans-serif;font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;'.$row['customer'].'</span>
+                        </p></td>
+                        <td style="width: 50%;border-top:0px;padding: 0 0.7rem;"></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%;border-top:0px;padding: 0 0.7rem;">';
+
+                        $message .= '<p>
+                            <span style="font-size: 14px;font-family: sans-serif;font-weight: bold;">Serial No : </span>
+                            <span style="font-size: 14px;font-family: sans-serif;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$row['serial_no'].'</span>
                         </p>';
                             
                         $message .= '</td>
                         <td style="width: 50%;border-top:0px;padding: 0 0.7rem;">
                             <p>
-                                <span style="font-size: 14px;font-family: sans-serif;font-weight: bold;">CCBSB No.: </span>
-                                <span style="font-size: 14px;font-family: sans-serif;font-weight: bold;color: red;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$row['po_no'].'</span>
+                                <span style="font-size: 14px;font-family: sans-serif;font-weight: bold;">DO No.: </span>
+                                <span style="font-size: 14px;font-family: sans-serif;font-weight: bold;color: red;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$row['po_no'].'</span>
                             </p>
                         </td>
                     </tr>
@@ -287,7 +347,7 @@ if(isset($_GET['userID'])){
                         <td style="width: 50%;border-top:0px;padding: 0 0.7rem;">
                             <p>
                                 <span style="font-size: 14px;font-family: sans-serif;font-weight: bold;">Farm : </span>
-                                <span style="font-size: 14px;font-family: sans-serif;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$row['name'].'</span>
+                                <span style="font-size: 14px;font-family: sans-serif;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$row['farmer_name'].'</span>
                             </p>
                         </td>
                         <td style="width: 50%;border-top:0px;padding: 0 0.7rem;">
@@ -312,7 +372,12 @@ if(isset($_GET['userID'])){
                         </td>
                     </tr>
                     <tr>
-                        <td style="width: 50%;border-top:0px;padding: 0 0.7rem;"></td>
+                        <td style="width: 50%;border-top:0px;padding: 0 0.7rem;">
+                            <p>
+                                <span style="font-size: 14px;font-family: sans-serif;font-weight: bold;">Remarks : </span>
+                                <span style="font-size: 14px;font-family: sans-serif;">'.$row['remark'].'</span>
+                            </p>
+                        </td>
                         <td style="width: 40%;border-top:0px;padding: 0 0.7rem;">
                             <p>
                                 <span style="font-size: 14px;font-family: sans-serif;font-weight: bold;">Average Crate Wt. : </span>
