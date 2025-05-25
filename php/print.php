@@ -301,6 +301,26 @@ if(isset($_GET['ids'])){
                     $weightTime = json_decode($row['weight_time'], true);
                     $cage_data = json_decode($row['cage_data'], true);
                     $userName = "Pri Name";
+                    $pages = ceil($totalCount / 180);
+                    $page = 1;
+
+                    $stmtcomp = $db->prepare("SELECT * FROM companies WHERE id=?");
+                    $stmtcomp->bind_param('s', $row['company']);
+                    $stmtcomp->execute();
+                    $resultc = $stmtcomp->get_result();
+                            
+                    if ($rowc = $resultc->fetch_assoc()) {
+                        $compname = $rowc['name'];
+                        $compreg = $rowc['reg_no'] ?? '';
+                        $compaddress = $rowc['address'];
+                        $compaddress2 = $rowc['address2'] ?? '';
+                        $compaddress3 = $rowc['address3'] ?? '';
+                        $compaddress4 = $rowc['address4'] ?? '';
+                        $compphone = $rowc['phone'] ?? '';
+                        $compfax = $rowc['fax'] ?? '';
+                        $compiemail = $rowc['email'] ?? '';
+                        $compwebsite = $rowc['website'] ?? '';
+                    }
 
                     if($row['weighted_by'] != null){
                         if ($select_stmt2 = $db->prepare("select * FROM users WHERE id=?")) {
@@ -317,15 +337,47 @@ if(isset($_GET['ids'])){
                         }
                     }
 
+                    $companyNameUpper = strtoupper($compname);
+                    $showInlineReg = strlen($compname) <= 20;
+
                     $message .= '<div id="container"><table class="table">
                 <tbody>
                     <tr>
-                        <td style="width: 100%;border-top:0px;text-align:center;"><img src="https://ccb.syncweigh.com/assets/header.png" width="100%" height="auto" /></td>
+                        <td style="width: 60%;border-top: 0px;">
+                            <p>';
+                                if ($showInlineReg) {
+                                    $message .= '
+                                        <span style="font-weight: bold; font-size: 18px;">' . $companyNameUpper . '</span>
+                                        <span style="font-size: 12px;"> ' . $compreg . '</span><br>';
+                                } else {
+                                    $message .= '
+                                        <span style="font-weight: bold; font-size: 18px;">' . $companyNameUpper . '</span><br>
+                                        <span style="font-size: 12px;">' . $compreg . '</span><br>';
+                                }
+                                
+                                // Address & contact info
+                                $message .= '
+                                <span style="font-size: 14px;">' . $compaddress . ' ' . ($compaddress2 ?? '') . '</span><br>
+                                <span style="font-size: 14px;">' . ($compaddress3 ?? '') . ' ' . ($compaddress4 ?? '') . '</span><br>
+                                <span style="font-size: 14px;">Tel: ' . ($compphone ?? '') . '  Fax: ' . ($compfax ?? '') . '</span><br>
+                                <span style="font-size: 14px;">Email: ' . ($compiemail ?? '') . '</span><br>';
+            if (!empty($compwebsite)) {
+                $message .= '<span style="font-size: 14px;">Website: ' . $compwebsite . '</span>';
+            }
+            
+            $message .= '
+                            </p>
+                        </td>
+                        <td style="vertical-align: top; text-align: right;border-top: 0px;">
+                            <p style="margin-left: 50px;">
+                                <span style="font-size: 20px; font-weight: bold;">DELIVERY ORDER</span><br>
+                            </p>
+                        </td>
                     </tr>
                 </tbody>
-            </table><br>
+            </table><br>';
             
-            <table class="table">
+            $message .= '<table class="table">
                 <tbody>
                     <tr>
                         <td colspan="2" style="width: 60%;border-top:0px;padding: 0 0.7rem;">';

@@ -168,6 +168,9 @@ if(isset($_GET['userID'])){
                     }
                 }
 
+                $companyNameUpper = strtoupper($compname);
+                $showInlineReg = strlen($compname) <= 20;
+
                 $message = '<html>
     <head>
         <style>
