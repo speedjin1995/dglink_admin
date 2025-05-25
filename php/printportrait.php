@@ -352,7 +352,7 @@ if(isset($_GET['ids'])){
                         <td style="width: 50%;border-top:0px;padding: 0 0.7rem;">
                             <p>
                                 <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Farm : </span>
-                                <span style="font-size: 12px;font-family: sans-serif;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$row['name'].'</span>
+                                <span style="font-size: 12px;font-family: sans-serif;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$row['farm_id'].'</span>
                             </p>
                         </td>
                         <td style="width: 50%;border-top:0px;padding: 0 0.7rem;">

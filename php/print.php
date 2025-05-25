@@ -301,7 +301,7 @@ if(isset($_GET['ids'])){
                     $weightTime = json_decode($row['weight_time'], true);
                     $cage_data = json_decode($row['cage_data'], true);
                     $userName = "Pri Name";
-                    $pages = ceil($totalCount / 180);
+                    //$pages = ceil($totalCount / 180);
                     $page = 1;
 
                     $stmtcomp = $db->prepare("SELECT * FROM companies WHERE id=?");
@@ -413,7 +413,7 @@ if(isset($_GET['ids'])){
                         <td style="width: 30%;border-top:0px;padding: 0 0.7rem;">
                             <p>
                                 <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Farm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </span>
-                                <span style="font-size: 12px;font-family: sans-serif;">'.$row['name'].'</span>
+                                <span style="font-size: 12px;font-family: sans-serif;">'.$row['farm_id'].'</span>
                             </p>
                         </td>
                         <td style="width: 40%;border-top:0px;padding: 0 0.7rem;">
