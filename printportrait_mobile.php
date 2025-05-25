@@ -108,7 +108,7 @@ function rearrangeList($weightDetails) {
 if(isset($_GET['userID'])){
     $id = $_GET['userID'];
 
-    if ($select_stmt = $db->prepare("select weighing.*, farms.name FROM weighing, farms WHERE weighing.farm_id = farms.id AND weighing.id=?")) {
+    if ($select_stmt = $db->prepare("select * FROM weighing WHERE id=?")) {
         $select_stmt->bind_param('s', $id);
 
         if (! $select_stmt->execute()) {
