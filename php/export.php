@@ -1,8 +1,9 @@
 <?php
-
-require_once 'db_connect.php';
 // // Load the database configuration file 
- 
+require_once 'db_connect.php';
+session_start();
+$company = $_SESSION['customer'];
+
 // Filter the excel data 
 function filterData(&$str){ 
     $str = preg_replace("/\t/", "\\t", $str); 
@@ -22,7 +23,7 @@ $fields = array('SERIAL NO', 'ORDER NO', 'BOOKING DATE TIME', 'CUSTOMER', 'PRODU
 $excelData = implode("\t", array_values($fields)) . "\n"; 
 
 ## Search 
-$searchQuery = " ";
+$searchQuery = " AND company = '".$company."'";
 
 if($_GET['fromDate'] != null && $_GET['fromDate'] != ''){
     $fromDate = DateTime::createFromFormat('d/m/Y', $_GET['fromDate']);
