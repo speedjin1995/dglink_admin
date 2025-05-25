@@ -244,7 +244,7 @@ if(isset($_GET['ids'])){
     for($counter=0; $counter<count($idsArray); $counter++){
         $id = $idsArray[$counter];
 
-        if ($select_stmt = $db->prepare("select weighing.*, farms.name FROM weighing, farms WHERE weighing.farm_id = farms.id AND weighing.id=?")) {
+        if ($select_stmt = $db->prepare("select weighing.* FROM weighing WHERE id=?")) {
             $select_stmt->bind_param('s', $id);
 
             if ($select_stmt->execute()) {

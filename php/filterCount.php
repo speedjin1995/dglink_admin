@@ -1,6 +1,8 @@
 <?php
 ## Database configuration
 require_once 'db_connect.php';
+session_start();
+$company = $_SESSION['customer'];
 
 ## Read value
 $draw = $_POST['draw'];
@@ -12,10 +14,10 @@ $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
 $searchValue = mysqli_real_escape_string($db,$_POST['search']['value']); // Search value
 
 ## Search 
-$searchQuery = " ";
+$searchQuery = " AND company = '".$company."'";
 
 if($_POST['fromDate'] != null && $_POST['fromDate'] != ''){
-  $searchQuery = " and created_datetime >= '".$_POST['fromDate']."'";
+  $searchQuery .= " and created_datetime >= '".$_POST['fromDate']."'";
 }
 
 if($_POST['toDate'] != null && $_POST['toDate'] != ''){
@@ -49,22 +51,22 @@ if (isset($_POST['customer']) && is_array($_POST['customer']) && count($_POST['c
 }
 
 if($searchValue != ''){
-  $searchQuery = " and (weighing.serial_no like '%".$searchValue."%' or 
-  weighing.lorry_no like '%".$searchValue."%' )";
+  $searchQuery = " and (serial_no like '%".$searchValue."%' or 
+  lorry_no like '%".$searchValue."%' )";
 }
 
 ## Total number of records without filtering
-$sel = mysqli_query($db,"select count(*) as allcount from weighing, farms WHERE weighing.farm_id = farms.id AND weighing.deleted = '0' AND weighing.status='Complete' AND farms.category IN ('CCB', 'Contract')");
+$sel = mysqli_query($db,"select count(*) as allcount from weighing WHERE deleted = '0' AND status='Complete'");
 $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
 ## Total number of record with filtering
-$sel = mysqli_query($db,"select count(*) as allcount from weighing, farms WHERE weighing.farm_id = farms.id AND weighing.deleted = '0' AND weighing.status='Complete' AND farms.category IN ('CCB', 'Contract')".$searchQuery);
+$sel = mysqli_query($db,"select count(*) as allcount from weighing WHERE deleted = '0' AND status='Complete'".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$empQuery = "select weighing.*, farms.name from weighing, farms WHERE weighing.farm_id = farms.id AND weighing.deleted = '0' AND weighing.status='Complete' AND farms.category IN ('CCB', 'Contract')".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+$empQuery = "select * from weighing WHERE deleted = '0' AND status='Complete'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;
@@ -96,7 +98,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "product"=>$row['product'],
     "driver_name"=>$row['driver_name'],
     "lorry_no"=>$row['lorry_no'],
-    "farm_id"=>$row['name'],
+    "farm_id"=>$row['farm_id'],
     "average_cage"=>$row['average_cage'],
     "average_bird"=>number_format($averageBirds, 2, '.', ''),
     "minimum_weight"=>$row['minimum_weight'],
@@ -117,7 +119,8 @@ $response = array(
   "draw" => intval($draw),
   "iTotalRecords" => $totalRecords,
   "iTotalDisplayRecords" => $totalRecordwithFilter,
-  "aaData" => $data
+  "aaData" => $data,
+  "query" => $empQuery
 );
 
 echo json_encode($response);

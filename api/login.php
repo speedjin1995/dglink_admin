@@ -16,7 +16,7 @@ $username=$post['userEmail'];
 $password=$post['userPassword'];
 $now = date("Y-m-d H:i:s");
 
-$stmt = $db->prepare("SELECT users.*, companies.farms_no, companies.reg_no, companies.name AS comp_name, companies.address, companies.address2, companies.address3, companies.address4, companies.phone, companies.fax, companies.email, companies.website, companies.products, companies.type, companies.parent from users, companies where users.customer = companies.id AND users.username= ?");
+$stmt = $db->prepare("SELECT users.*, companies.farms_no, companies.reg_no, companies.name AS comp_name, companies.address, companies.address2, companies.address3, companies.address4, companies.phone, companies.fax, companies.email, companies.website, companies.products, companies.type, companies.parent from users, companies where users.customer = companies.id AND users.username= ? AND users.deleted = '0'");
 //$stmt = $db->prepare("SELECT * from users where username= ?");
 $stmt->bind_param('s', $username);
 $stmt->execute();

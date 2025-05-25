@@ -155,6 +155,9 @@ if(isset($post['status'], $post['product'], $post['timestampData']
 		
 		$select_stmt->close();
 	}
+	else if(isset($post['serialNo']) && $post['serialNo'] != null && $post['serialNo'] != ''){
+	    $serialNo = $post['serialNo'];
+	}
 
     if ($select_stmt2 = $db->prepare("SELECT COUNT(*) FROM weighing WHERE start_time = ? AND weighted_by = ? AND farm_id = ?")) {
 	    $select_stmt2->bind_param('sss', $startTime, $weighted_by, $farmId);

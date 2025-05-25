@@ -8,6 +8,7 @@ if(!isset($_SESSION['userID'])){
 else{
   $user = $_SESSION['userID'];
   $language = $_SESSION['language'];
+  $actual_link = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]";
   $_SESSION['page']='dashboard';
   $stmt = $db->prepare("SELECT * from users where id = ?");
 	$stmt->bind_param('s', $user);
@@ -253,7 +254,7 @@ $(function () {
                 data: 'serial_no',
                 render: function(data, type, row) {
                     var userId = row.id; // Assuming 'id' is the user ID from the server data
-                    return '<a href="https://ccb.syncweigh.com/printportrait.php?userID=' + userId + '" target="_blank">' + data + '</a>';
+                    return '<a href="<?=$actual_link?>/chickenweigher/printportrait.php?userID=' + userId + '" target="_blank">' + data + '</a>';
                 }
             },
             { data: 'customer' },
@@ -322,7 +323,7 @@ $(function () {
         data: 'serial_no',
         render: function(data, type, row) {
             var userId = row.id; // Assuming 'id' is the user ID from the server data
-            return '<a href="https://ccb.syncweigh.com/printportrait.php?userID=' + userId + '" target="_blank">' + data + '</a>';
+            return '<a href="<?=$actual_link?>/chickenweigher/printportrait.php?userID=' + userId + '" target="_blank">' + data + '</a>';
         }
       },
       { data: 'customer' },
@@ -401,7 +402,7 @@ $(function () {
             data: 'serial_no',
             render: function(data, type, row) {
                 var userId = row.id; // Assuming 'id' is the user ID from the server data
-                return '<a href="https://ccb.syncweigh.com/printportrait.php?userID=' + userId + '" target="_blank">' + data + '</a>';
+                return '<a href="<?=$actual_link?>/chickenweigher/printportrait.php?userID=' + userId + '" target="_blank">' + data + '</a>';
             }
         },
         { data: 'customer' },

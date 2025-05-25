@@ -339,12 +339,12 @@ to get the desired effect
               <p><?=$languageArray['dashboard_code'][$language] ?></p>
             </a>
           </li>
-          <li class="nav-item">
+          <!--li class="nav-item">
             <a href="#weight" data-file="weightPage.php" class="nav-link link">
               <i class="nav-icon fas fa-chart-pie"></i>
               <p><?=$languageArray['weight_weighing_code'][$language] ?></p>
             </a>
-          </li>
+          </li-->
           <li class="nav-item">
             <a href="#billboard" data-file="billboard.php" class="nav-link link">
               <i class="nav-icon fas fa-book"></i>
@@ -353,7 +353,7 @@ to get the desired effect
           </li>
           <?php 
               if($role == "ADMIN"){
-                echo '<li class="nav-item">
+                echo '<!--li class="nav-item">
                 <a href="#users" data-file="users.php" class="nav-link link">
                   <i class="nav-icon fas fa-user"></i>
                   <p>'.$languageArray['staff_code'][$language].'</p>
@@ -414,7 +414,7 @@ to get the desired effect
                     </a>
                   </li>
                 </ul>
-              </li>';
+              </li-->';
                   /*<li class="nav-item">
                     <a href="#groups" data-file="groups.php" class="nav-link link">
                       <i class="nav-icon fas fa-store"></i>
@@ -433,21 +433,21 @@ to get the desired effect
             <ul class="nav nav-treeview" style="display: none;">
               <?php 
                 if($role == "ADMIN"){
-                  echo '<li class="nav-item">
+                  echo '<!--li class="nav-item">
                   <a href="#company" data-file="company.php" class="nav-link link">
                     <i class="nav-icon fas fa-building"></i>
                     <p>'.$languageArray['company_profile_code'][$language].'</p>
                   </a>
-                </li>';
+                </li-->';
                 }
               ?>
 
-              <li class="nav-item">
+              <!--li class="nav-item">
                 <a href="#myprofile" data-file="myprofile.php" class="nav-link link">
                   <i class="nav-icon fas fa-id-badge"></i>
                   <p><?=$languageArray['profile_code'][$language] ?></p>
                 </a>
-              </li>
+              </li-->
           
               <li class="nav-item">
                 <a href="#changepassword" data-file="changePassword.php" class="nav-link link">

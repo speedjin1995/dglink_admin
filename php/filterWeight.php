@@ -1,6 +1,8 @@
 <?php
 ## Database configuration
 require_once 'db_connect.php';
+session_start();
+$company = $_SESSION['customer'];
 
 ## Read value
 $draw = $_POST['draw'];
@@ -12,7 +14,7 @@ $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
 $searchValue = mysqli_real_escape_string($db,$_POST['search']['value']); // Search value
 
 ## Search 
-$searchQuery = " ";
+$searchQuery = " AND company = '".$company."'";
 
 if($_POST['fromDate'] != null && $_POST['fromDate'] != ''){
   $dateTime = DateTime::createFromFormat('d/m/Y', $_POST['fromDate']);

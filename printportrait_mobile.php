@@ -276,12 +276,12 @@ if(isset($_GET['userID'])){
                             <p>';
                                 if ($showInlineReg) {
                                     $message .= '
-                                                    <span style="font-weight: bold; font-size: 18px;">' . $companyNameUpper . '</span>
-                                                    <span style="font-size: 12px;"> ' . $compreg . '</span><br>';
+                                        <span style="font-weight: bold; font-size: 18px;">' . $companyNameUpper . '</span>
+                                        <span style="font-size: 12px;"> ' . $compreg . '</span><br>';
                                 } else {
                                     $message .= '
-                                                    <span style="font-weight: bold; font-size: 18px;">' . $companyNameUpper . '</span><br>
-                                                    <span style="font-size: 12px;">' . $compreg . '</span><br>';
+                                        <span style="font-weight: bold; font-size: 18px;">' . $companyNameUpper . '</span><br>
+                                        <span style="font-size: 12px;">' . $compreg . '</span><br>';
                                 }
                                 
                                 // Address & contact info

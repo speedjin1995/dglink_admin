@@ -39,12 +39,12 @@ $data = 0;
 $empRecords = null;
 
 ## Search 
-$searchQuery = " ";
+$searchQuery = " AND company = '".$company."'";
 
 if($_POST['fromDate'] != null && $_POST['fromDate'] != ''){
   $dateTime = DateTime::createFromFormat('d/m/Y', $_POST['fromDate']);
   $fromDateTime = $dateTime->format('Y-m-d 00:00:00');
-  $searchQuery = " and end_time >= '".$fromDateTime."'";
+  $searchQuery .= " and end_time >= '".$fromDateTime."'";
 }
 
 if($_POST['toDate'] != null && $_POST['toDate'] != ''){
@@ -62,25 +62,25 @@ if($_POST['customer'] != null && $_POST['customer'] != '' && $_POST['customer'] 
 }
 
 if($searchValue != ''){
-  $searchQuery = " and (weighing.serial_no like '%".$searchValue."%' or 
-  weighing.lorry_no like '%".$searchValue."%' )";
+  $searchQuery = " and (serial_no like '%".$searchValue."%' or 
+  lorry_no like '%".$searchValue."%' )";
 }
 
-if($role_code == 'ADMIN' || $role_code == 'MANAGER'){
-    ## Total number of records without filtering
-    $sel = mysqli_query($db,"select count(*) as allcount from weighing, farms WHERE weighing.company='".$company."' AND weighing.farm_id = farms.id AND weighing.deleted = '0' AND weighing.status='Complete' AND farms.category IN ('CCB', 'Contract')");
-    $records = mysqli_fetch_assoc($sel);
-    $totalRecords = $records['allcount'];
-    
-    ## Total number of record with filtering
-    $sel = mysqli_query($db,"select count(*) as allcount from weighing, farms WHERE weighing.company='".$company."' AND weighing.farm_id = farms.id AND weighing.deleted = '0' AND weighing.status='Complete' AND farms.category IN ('CCB', 'Contract')".$searchQuery);
-    $records = mysqli_fetch_assoc($sel);
-    $totalRecordwithFilter = $records['allcount'];
-    
-    ## Fetch records
-    $empQuery = "select weighing.*, farms.name from weighing, farms WHERE weighing.company='".$company."' AND weighing.farm_id = farms.id AND weighing.deleted = '0' AND weighing.status='Complete' AND farms.category IN ('CCB', 'Contract')".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
-    $empRecords = mysqli_query($db, $empQuery);
-}
+//if($role_code == 'ADMIN' || $role_code == 'MANAGER'){
+## Total number of records without filtering
+$sel = mysqli_query($db,"select count(*) as allcount from weighing WHERE deleted = '0' AND status='Complete'");
+$records = mysqli_fetch_assoc($sel);
+$totalRecords = $records['allcount'];
+
+## Total number of record with filtering
+$sel = mysqli_query($db,"select count(*) as allcount from weighing WHERE deleted = '0' AND status='Complete'".$searchQuery);
+$records = mysqli_fetch_assoc($sel);
+$totalRecordwithFilter = $records['allcount'];
+
+## Fetch records
+$empQuery = "select * from weighing WHERE deleted = '0' AND status='Complete'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+$empRecords = mysqli_query($db, $empQuery);
+/*}
 else{
     if(count($farms) > 0){
         $commaSeparatedString = implode(',', $farms);
@@ -104,23 +104,7 @@ else{
     else{
         
     }
-    /*else{
-        ## Total number of records without filtering
-        $defaultQuery = 'JSON_CONTAINS(weighing.weighted_by, \'["'.$userId.'"]\') > 0 OR JSON_CONTAINS(weighing.weighted_by, \'['.$userId.']\')';
-        $sel = mysqli_query($db,"select count(*) as allcount from weighing, farms WHERE weighing.farm_id = farms.id AND weighing.deleted = '0' AND weighing.status<>'Complete' AND ".$defaultQuery);
-        $records = mysqli_fetch_assoc($sel);
-        $totalRecords = $records['allcount'];
-        
-        ## Total number of record with filtering
-        $sel = mysqli_query($db,"select count(*) as allcount from weighing, farms WHERE weighing.farm_id = farms.id AND weighing.deleted = '0' AND weighing.status<>'Complete' AND ".$defaultQuery.' '.$searchQuery);
-        $records = mysqli_fetch_assoc($sel);
-        $totalRecordwithFilter = $records['allcount'];
-        
-        ## Fetch records
-        $empQuery = "select weighing.*, farms.name from weighing, farms WHERE weighing.farm_id = farms.id AND weighing.deleted = '0' AND weighing.status<>'Complete' AND ".$defaultQuery.' '.$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
-        $empRecords = mysqli_query($db, $empQuery);
-    }*/
-}
+}*/
 
 
 $data = array();
@@ -140,7 +124,7 @@ if($empRecords != null){
         "product"=>$row['product'],
         "driver_name"=>$row['driver_name'],
         "lorry_no"=>$row['lorry_no'],
-        "farm_id"=>$row['name'],
+        "farm_id"=>$row['farm_id'],
         "average_cage"=>$row['average_cage'],
         "average_bird"=>$row['average_bird'],
         "minimum_weight"=>$row['minimum_weight'],
