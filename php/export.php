@@ -28,7 +28,7 @@ $searchQuery = " AND company = '".$company."'";
 if($_GET['fromDate'] != null && $_GET['fromDate'] != ''){
     $fromDate = DateTime::createFromFormat('d/m/Y', $_GET['fromDate']);
     $fromDateTime = date_format($fromDate,"Y-m-d 00:00:00");
-    $searchQuery = " and created_datetime >= '".$fromDateTime."'";
+    $searchQuery .= " and created_datetime >= '".$fromDateTime."'";
 }
 
 if($_GET['toDate'] != null && $_GET['toDate'] != ''){
