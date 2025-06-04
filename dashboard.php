@@ -8,6 +8,7 @@ if(!isset($_SESSION['userID'])){
 else{
   $user = $_SESSION['userID'];
   $language = $_SESSION['language'];
+  $company = $_SESSION['customer'];
   $actual_link = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]";
   $_SESSION['page']='dashboard';
   $stmt = $db->prepare("SELECT * from users where id = ?");
@@ -19,8 +20,8 @@ else{
     $role = $row['role_code'];
   }
 
-  $packages = $db->query("SELECT * FROM farms WHERE deleted = '0'");
-  $customers = $db->query("SELECT * FROM customers WHERE deleted = '0'");
+  $packages = $db->query("SELECT * FROM farms WHERE deleted = '0' AND company = '".$company."' ORDER BY name");
+  $customers = $db->query("SELECT * FROM customers WHERE deleted = '0' AND company = '".$company."' ORDER BY customer_name");
 }
 ?>
 

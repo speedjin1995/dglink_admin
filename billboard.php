@@ -8,6 +8,7 @@ if(!isset($_SESSION['userID'])){
 else{
     $user = $_SESSION['userID'];
     $language = $_SESSION['language'];
+    $company = $_SESSION['customer'];
     $actual_link = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]";
     $_SESSION['page']='billboard';
     $farms = array();
@@ -26,19 +27,19 @@ else{
     }
     
     if($roles == 'MANAGER' || $roles == 'ADMIN'){
-        $packages = $db->query("SELECT * FROM farms WHERE deleted = '0' ORDER BY name");
+        $packages = $db->query("SELECT * FROM farms WHERE deleted = '0' AND company = '".$company."' ORDER BY name");
     }
     else{
         if(count($farms) > 0){
             $commaSeparatedString = implode(',', $farms);
-            $packages = $db->query("SELECT * FROM farms WHERE deleted = '0' AND id IN ($commaSeparatedString) ORDER BY name");
+            $packages = $db->query("SELECT * FROM farms WHERE deleted = '0' AND company = '".$company."' AND id IN ($commaSeparatedString) ORDER BY name");
         }
         else{
             $packages = [];
         }
     }
     
-    $customers = $db->query("SELECT * FROM customers WHERE deleted = '0' ORDER BY customer_name");
+    $customers = $db->query("SELECT * FROM customers WHERE deleted = '0' AND company = '".$company."' ORDER BY customer_name");
 }
 ?>
 
