@@ -76,12 +76,18 @@ while($row = $result->fetch_assoc()){
 }
 
 $stmt->close();
-$db->close();
 
-echo json_encode(
+$response = json_encode(
     array(
         "status"=> "success", 
         "message"=> $message
     )
 );
+$stmtU = $db->prepare("UPDATE api_requests SET response = ? WHERE id = ?");
+$stmtU->bind_param('ss', $response, $invid);
+$stmtU->execute();
+
+$stmtU->close();
+$db->close();
+echo $response;
 ?>

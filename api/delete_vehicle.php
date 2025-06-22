@@ -2,7 +2,7 @@
 require_once 'db_connect.php';
 
 $post = json_decode(file_get_contents('php://input'), true);
-$services = 'Delete_Grade';
+$services = 'Delete_Vehicle';
 $requests = json_encode($post);
 
 $stmtL = $db->prepare("INSERT INTO api_requests (services, request) VALUES (?, ?)");
@@ -13,7 +13,7 @@ $invid = $stmtL->insert_id;
 $id = $post['id'];
 $deleted = '1';
 
-$stmt = $db->prepare("UPDATE grades SET deleted =? WHERE id =?");
+$stmt = $db->prepare("UPDATE vehicles SET deleted =? WHERE id =?");
 $stmt->bind_param('ss', $deleted, $id);
 
 if($stmt->execute()){

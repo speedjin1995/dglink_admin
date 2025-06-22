@@ -322,12 +322,17 @@ if(isset($post['status'], $post['product'], $post['timestampData']
                 // Execute the prepared query.
                 $id = 0;
                 if (! $select_stmt->execute()) {
-                    echo json_encode(
+                    $response = json_encode(
                         array(
                             "status" => "failed",
                             "message" => $select_stmt->error
                         )
-                    ); 
+                    );
+                    $stmtU = $db->prepare("UPDATE api_requests SET response = ? WHERE id = ?");
+                    $stmtU->bind_param('ss', $response, $invid);
+                    $stmtU->execute();
+                    $stmtU->close();
+                    return $response;
                 }
                 else{
                     $result = $select_stmt->get_result();
@@ -335,35 +340,54 @@ if(isset($post['status'], $post['product'], $post['timestampData']
                     if ($row = $result->fetch_assoc()) {
                         $serialNo = $row['serial_no'];
                         $id = $row['id'];
-                        
-                        echo json_encode(
-            				array(
-            					"status"=> "success", 
+
+                        $response = json_encode(
+                        array(
+                                "status"=> "success", 
             					"message"=> "Updated Successfully!!",
             					"serialNo"=> $serialNo,
             					"id" => $id
-            				)
-            			);
+                            )
+                        );
+                        $stmtU = $db->prepare("UPDATE api_requests SET response = ? WHERE id = ?");
+                        $stmtU->bind_param('ss', $response, $invid);
+                        $stmtU->execute();
+                        $stmtU->close();
+                        return $response;
                     }
                     else{
-                        echo json_encode(
-                            array(
+                        $response = json_encode(
+                        array(
                                 "status" => "failed",
                                 "message" => "Failed to get result"
                             )
-                        ); 
+                        );
+                        $stmtU = $db->prepare("UPDATE api_requests SET response = ? WHERE id = ?");
+                        $stmtU->bind_param('ss', $response, $invid);
+                        $stmtU->execute();
+                        $stmtU->close();
+                        return $response;
                     }
         		}
+
+                $select_stmt->close();
+                $db->close();
         	}
         }
 	}
 } 
 else{
-    echo json_encode(
+    $response = json_encode(
         array(
             "status"=> "failed", 
             "message"=> "Please fill in all the fields"
         )
-    );     
+    );
+	$stmtU = $db->prepare("UPDATE api_requests SET response = ? WHERE id = ?");
+	$stmtU->bind_param('ss', $response, $invid);
+	$stmtU->execute();
+
+	$db->close();
+	echo $response;      
 }
 ?>

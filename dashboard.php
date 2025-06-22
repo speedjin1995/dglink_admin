@@ -20,8 +20,8 @@ else{
     $role = $row['role_code'];
   }
 
-  $packages = $db->query("SELECT * FROM farms WHERE deleted = '0' AND company = '".$company."' ORDER BY name");
-  $customers = $db->query("SELECT * FROM customers WHERE deleted = '0' AND company = '".$company."' ORDER BY customer_name");
+  $packages = $db->query("SELECT * FROM farms WHERE deleted = '0' AND customer = '".$company."' ORDER BY name");
+  $customers = $db->query("SELECT * FROM customers WHERE deleted = '0' AND customer = '".$company."' ORDER BY customer_name");
 }
 ?>
 

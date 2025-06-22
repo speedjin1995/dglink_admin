@@ -2,23 +2,33 @@
 require_once 'db_connect.php';
 
 $post = json_decode(file_get_contents('php://input'), true);
-$services = 'Delete_Grade';
+$services = 'Delete_Vehicles';
 $requests = json_encode($post);
 
 $stmtL = $db->prepare("INSERT INTO api_requests (services, request) VALUES (?, ?)");
 $stmtL->bind_param('ss', $services, $requests);
 $stmtL->execute();
-$invid = $stmtL->insert_id;
+$invid = $stmtL->insert_id; 
 
-$id = $post['id'];
+$ids = json_decode($post['id'], true);
 $deleted = '1';
+$success = true;
 
-$stmt = $db->prepare("UPDATE grades SET deleted =? WHERE id =?");
-$stmt->bind_param('ss', $deleted, $id);
+for($i=0; $i<count($ids); $i++){
+    $id = $ids[$i];
+    
+    $stmt = $db->prepare("UPDATE vehicles SET deleted =? WHERE id =?");
+    $stmt->bind_param('ss', $deleted, $id);
+    
+    
+    if(!$stmt->execute()){
+        $success = false;
+    }
+}
 
-if($stmt->execute()){
-    $stmt->close();
+$stmt->close();
 
+if($success){
     $response = json_encode(
         array(
             "status"=> "success", 
@@ -34,8 +44,6 @@ if($stmt->execute()){
     echo $response;
 }
 else{
-    $stmt->close();
-
     $response = json_encode(
         array(
             "status"=> 'failed', 
@@ -48,6 +56,6 @@ else{
 
     $stmtU->close();
     $db->close();
-    echo $response;
+    echo $response; 
 }
 ?>

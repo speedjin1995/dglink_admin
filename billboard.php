@@ -27,19 +27,19 @@ else{
     }
     
     if($roles == 'MANAGER' || $roles == 'ADMIN'){
-        $packages = $db->query("SELECT * FROM farms WHERE deleted = '0' AND company = '".$company."' ORDER BY name");
+        $packages = $db->query("SELECT * FROM farms WHERE deleted = '0' AND customer = '".$company."' ORDER BY name");
     }
     else{
         if(count($farms) > 0){
             $commaSeparatedString = implode(',', $farms);
-            $packages = $db->query("SELECT * FROM farms WHERE deleted = '0' AND company = '".$company."' AND id IN ($commaSeparatedString) ORDER BY name");
+            $packages = $db->query("SELECT * FROM farms WHERE deleted = '0' AND customer = '".$company."' AND id IN ($commaSeparatedString) ORDER BY name");
         }
         else{
             $packages = [];
         }
     }
     
-    $customers = $db->query("SELECT * FROM customers WHERE deleted = '0' AND company = '".$company."' ORDER BY customer_name");
+    $customers = $db->query("SELECT * FROM customers WHERE deleted = '0' AND customer = '".$company."' ORDER BY customer_name");
 }
 ?>
 
