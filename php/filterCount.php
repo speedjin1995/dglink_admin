@@ -86,6 +86,22 @@ while($row = mysqli_fetch_assoc($empRecords)) {
 
   $averageBirds = $totalWeigh / $totalBirds;
 
+  // Get Farm info
+  $farm = '';
+            
+  if ($update_stmt2 = $db->prepare("SELECT * FROM farms WHERE id=? AND customer=?")) {
+    $update_stmt->bind_param('ss', $row['farm_id'], $row['company']);
+
+    // Execute the prepared query.
+    if ($update_stmt2->execute()) {
+      $result2 = $update_stmt2->get_result();
+      
+      if ($row1 = $result2->fetch_assoc()) {
+          $farm = $row1['name'];
+      }
+    }
+  }
+
   $data[] = array( 
     "no"=>$counter,
     "id"=>$row['id'],
@@ -98,7 +114,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "product"=>$row['product'],
     "driver_name"=>$row['driver_name'],
     "lorry_no"=>$row['lorry_no'],
-    "farm_id"=>$row['farm_id'],
+    "farm_id"=>$farm,
     "average_cage"=>$row['average_cage'],
     "average_bird"=>number_format($averageBirds, 2, '.', ''),
     "minimum_weight"=>$row['minimum_weight'],

@@ -2,7 +2,13 @@
 // // Load the database configuration file 
 require_once 'db_connect.php';
 session_start();
-$company = $_SESSION['customer'];
+
+if(isset($_GET['parent']) &&$_GET['parent'] != null && $_GET['parent'] != ''){
+    $company = $_GET['parent'];
+}
+else{
+    $company = $_SESSION['customer'];
+}
 
 // Filter the excel data 
 function filterData(&$str){ 
@@ -48,7 +54,6 @@ if($_GET['customer'] != null && $_GET['customer'] != '' && $_GET['customer'] != 
 // Fetch records from database
 $query = $db->query("select * FROM weighing WHERE deleted = '0' AND start_time IS NOT NULL AND end_time IS NOT NULL".$searchQuery."");
 
-echo $query->num_rows;
 if($query->num_rows > 0){ 
     // Output each row of the data 
     while($row = $query->fetch_assoc()){ 

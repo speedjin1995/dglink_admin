@@ -616,8 +616,7 @@ if(isset($_GET['ids'])){
                             </tr>
                         </tbody>
                     </table>
-                </div>';
-                    //<p style="page-break-after: always;">&nbsp;</p>';
+                </div><p style="page-break-after: always;">&nbsp;</p>';
                 }
             }
         }

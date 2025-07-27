@@ -254,6 +254,8 @@ if(isset($post['status'], $post['product'], $post['timestampData']
 		$data3 = json_encode($cageDetails);
 		$now = date("Y-m-d H:i:s");
 		$id = '0';
+		
+		$id = $post['id'];
 
         if($insert){
             if ($insert_stmt = $db->prepare("INSERT INTO weighing (serial_no, customer, supplier, product, driver_name, lorry_no, farm_id, 
@@ -342,7 +344,7 @@ if(isset($post['status'], $post['product'], $post['timestampData']
                         $id = $row['id'];
 
                         $response = json_encode(
-                        array(
+                            array(
                                 "status"=> "success", 
             					"message"=> "Retrieve Successfully!!",
             					"serialNo"=> $serialNo,
