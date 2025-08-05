@@ -13,24 +13,42 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if(($row = $result->fetch_assoc()) !== null){
-	$password = hash('sha512', $password . $row['salt']);
+	// Check if user products have M, if yes allows login else unauthorized
+	$decodedProducts = json_decode($row['products'], true);
+	$allowLogin = false;
 	
-	if($password == $row['password']){
-		$_SESSION['userID']=$row['id'];
-		$_SESSION['role_code']=$row['role_code'];
-		$_SESSION['customer']=$row['customer'];
-		$_SESSION['page']='dashboard';
-		$stmt->close();
-		$db->close();
-		
-		echo '<script type="text/javascript">';
-		echo 'window.location.href = "../index.php";</script>';
-	} 
-	else{
-		echo '<script type="text/javascript">alert("Login unsuccessful, password or username is not matched");';
-		echo 'window.location.href = "../login.html";</script>';
+	if (in_array('M', $decodedProducts)) {
+		$allowLogin = true;
+	} else {
+		if ($row['username'] == 'admin@123' || $row['username'] == 'admin2@123') {
+			$allowLogin = true;
+		}else{
+			$allowLogin = false;
+		}
 	}
+
+	if (!$allowLogin){
+		echo '<script type="text/javascript">alert("This user not allowed to enter medium pack.");';
+		echo 'window.location.href = "../login.html";</script>';
+	}else{
+		$password = hash('sha512', $password . $row['salt']);
 	
+		if($password == $row['password']){
+			$_SESSION['userID']=$row['id'];
+			$_SESSION['role_code']=$row['role_code'];
+			$_SESSION['customer']=$row['customer'];
+			$_SESSION['page']='dashboard';
+			$stmt->close();
+			$db->close();
+			
+			echo '<script type="text/javascript">';
+			echo 'window.location.href = "../index.php";</script>';
+		} 
+		else{
+			echo '<script type="text/javascript">alert("Login unsuccessful, password or username is not matched");';
+			echo 'window.location.href = "../login.html";</script>';
+		}
+	}
 } 
 else{
 	 echo '<script type="text/javascript">alert("Login unsuccessful, password or username is not matched");';

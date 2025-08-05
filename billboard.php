@@ -254,6 +254,10 @@ $(function () {
     'searching': false,
     'order': [[ 1, 'asc' ]],
     'columnDefs': [ { orderable: false, targets: [0] }],
+    'infoCallback': function( settings, start, end, max, total, pre ) {
+      var displayStart = (total === 0) ? 0 : start;
+      return "Showing " + displayStart + " to " + end + " of " + total + " entries";
+    },
     'ajax': {
       'type': 'POST',
       'url':'php/filterBillboard.php',
@@ -341,6 +345,10 @@ $(function () {
       'searching': false,
       'order': [[ 1, 'asc' ]],
       'columnDefs': [ { orderable: false, targets: [0] }],
+      'infoCallback': function( settings, start, end, max, total, pre ) {
+        var displayStart = (total === 0) ? 0 : start;
+        return "Showing " + displayStart + " to " + end + " of " + total + " entries";
+      },
       'ajax': {
         'type': 'POST',
         'url':'php/filterBillboard.php',
