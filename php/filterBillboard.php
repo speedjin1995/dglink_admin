@@ -115,7 +115,7 @@ if($empRecords != null){
         $farm = '';
             
         if ($update_stmt2 = $db->prepare("SELECT * FROM farms WHERE id=? AND customer=?")) {
-            $update_stmt->bind_param('ss', $row['farm_id'], $row['company']);
+            $update_stmt2->bind_param('ss', $row['farm_id'], $row['company']);
         
             // Execute the prepared query.
             if ($update_stmt2->execute()) {
