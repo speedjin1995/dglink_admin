@@ -128,7 +128,12 @@ if(($row = $result->fetch_assoc()) !== null){
                 $stmtU = $db->prepare("UPDATE api_requests SET response = ? WHERE id = ?");
                 $stmtU->bind_param('ss', $response, $invid);
                 $stmtU->execute();
-        
+
+                $updateDevice = $db->prepare("UPDATE users SET device_id = ? WHERE id = ?");
+                $updateDevice->bind_param('ss', $deviceId, $row['id']);
+                $updateDevice->execute();
+
+                $updateDevice->close();
                 $stmt->close();
                 $stmtU->close();
                 $db->close();
@@ -178,7 +183,12 @@ if(($row = $result->fetch_assoc()) !== null){
                 $stmtU = $db->prepare("UPDATE api_requests SET response = ? WHERE id = ?");
                 $stmtU->bind_param('ss', $response, $invid);
                 $stmtU->execute();
+
+                $updateDevice = $db->prepare("UPDATE users SET device_id = ? WHERE id = ?");
+                $updateDevice->bind_param('ss', $deviceId, $row['id']);
+                $updateDevice->execute();
         
+                $updateDevice->close();
                 $stmt->close();
                 $stmtU->close();
                 $db->close();

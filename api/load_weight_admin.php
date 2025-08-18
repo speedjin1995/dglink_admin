@@ -27,8 +27,8 @@ while($row = $result->fetch_assoc()){
     $farmId=$row['farm_id'];
     $farmName='';
     
-    if ($update_stmt = $db->prepare("SELECT * FROM farms WHERE id=?")) {
-        $update_stmt->bind_param('s', $farmId);
+    if ($update_stmt = $db->prepare("SELECT * FROM farms WHERE id=? AND customer = ?")) {
+        $update_stmt->bind_param('ss', $farmId, $staffId);
         
         if ($update_stmt->execute()) {
             $result3 = $update_stmt->get_result();
