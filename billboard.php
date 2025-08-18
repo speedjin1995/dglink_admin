@@ -216,6 +216,7 @@ else{
                 <tr>
                   <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
                   <th>Serial No</th>
+                  <th>DO No</th>
                   <th>Customer</th>
                   <th>Product</th>
                   <th>Vehicle No.</th>
@@ -279,6 +280,7 @@ $(function () {
           }
         },
         { data: 'serial_no' },
+        { data: 'po_no' },
         { data: 'customer' },
         { data: 'product' },
         { data: 'lorry_no' },
@@ -370,6 +372,7 @@ $(function () {
           }
         },
         { data: 'serial_no' },
+        { data: 'po_no' },
         { data: 'customer' },
         { data: 'product' },
         { data: 'lorry_no' },

@@ -166,6 +166,7 @@ else{
               <thead>
                 <tr>
                   <th>Serial No</th>
+                  <th>DO No</th>
                   <th>Customer</th>
                   <th>Farm</th>
                   <th>Number of <br>Cages</th>
@@ -175,7 +176,7 @@ else{
               </thead>
               <tfoot>
                 <tr>
-                    <th colspan="3">Total</th>
+                    <th colspan="4">Total</th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -262,6 +263,7 @@ $(function () {
                     return '<a href="<?=$actual_link?>/chickenweigher/printportrait.php?userID=' + userId + '" target="_blank">' + data + '</a>';
                 }
             },
+            { data: 'po_no' },
             { data: 'customer' },
             { data: 'farm_id' },
             { data: 'total_cages' },
@@ -282,7 +284,7 @@ $(function () {
 
             // Calculate total for 'total_cages' column
             var totalCages = api
-                .column(3, { page: 'current' })
+                .column(4, { page: 'current' })
                 .data()
                 .reduce(function(a, b) {
                     return a + parseInt(b, 10);
@@ -290,15 +292,15 @@ $(function () {
 
             // Calculate total for 'total_birds' column
             var totalBirds = api
-                .column(4, { page: 'current' })
+                .column(5, { page: 'current' })
                 .data()
                 .reduce(function(a, b) {
                     return a + parseInt(b, 10);
                 }, 0);
 
             // Update footer with the total
-            $(api.column(3).footer()).html(totalCages);
-            $(api.column(4).footer()).html(totalBirds);
+            $(api.column(4).footer()).html(totalCages);
+            $(api.column(5).footer()).html(totalBirds);
         }
       });
     }
@@ -335,6 +337,7 @@ $(function () {
             return '<a href="<?=$actual_link?>/chickenweigher/printportrait.php?userID=' + userId + '" target="_blank">' + data + '</a>';
         }
       },
+      { data: 'po_no' },
       { data: 'customer' },
       { data: 'farm_id' },
       { data: 'total_cages' },
@@ -355,7 +358,7 @@ $(function () {
 
         // Calculate total for 'total_cages' column
         var totalCages = api
-            .column(3, { page: 'current' })
+            .column(4, { page: 'current' })
             .data()
             .reduce(function(a, b) {
                 return a + parseInt(b, 10);
@@ -363,15 +366,15 @@ $(function () {
 
         // Calculate total for 'total_birds' column
         var totalBirds = api
-            .column(4, { page: 'current' })
+            .column(5, { page: 'current' })
             .data()
             .reduce(function(a, b) {
                 return a + parseInt(b, 10);
             }, 0);
 
         // Update footer with the total
-        $(api.column(3).footer()).html(totalCages);
-        $(api.column(4).footer()).html(totalBirds);
+        $(api.column(4).footer()).html(totalCages);
+        $(api.column(5).footer()).html(totalBirds);
     }
   });
 
@@ -418,6 +421,7 @@ $(function () {
                 return '<a href="<?=$actual_link?>/chickenweigher/printportrait.php?userID=' + userId + '" target="_blank">' + data + '</a>';
             }
         },
+        { data: 'po_no' },
         { data: 'customer' },
         { data: 'farm_id' },
         { data: 'total_cages' },
@@ -438,7 +442,7 @@ $(function () {
 
             // Calculate total for 'total_cages' column
             var totalCages = api
-                .column(3, { page: 'current' })
+                .column(4, { page: 'current' })
                 .data()
                 .reduce(function(a, b) {
                     return a + parseInt(b, 10);
@@ -446,15 +450,15 @@ $(function () {
 
             // Calculate total for 'total_birds' column
             var totalBirds = api
-                .column(4, { page: 'current' })
+                .column(5, { page: 'current' })
                 .data()
                 .reduce(function(a, b) {
                     return a + parseInt(b, 10);
                 }, 0);
 
             // Update footer with the total
-            $(api.column(3).footer()).html(totalCages);
-            $(api.column(4).footer()).html(totalBirds);
+            $(api.column(4).footer()).html(totalCages);
+            $(api.column(5).footer()).html(totalBirds);
         }
     });
   });
