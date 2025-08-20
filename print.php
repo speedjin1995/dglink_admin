@@ -10,6 +10,7 @@ $compiemail = 'admin@synctronix.com.my';
 
 $mapOfWeights = array();
 $mapOfHouses = array();
+$mapOfBirdsToCages = array();
 
 $totalCount = 0;
 $totalGross = 0.0;
@@ -61,12 +62,13 @@ function totalWeight($strings){
 }
 
 function rearrangeList($weightDetails) {
-    global $mapOfHouses, $mapOfWeights, $totalSGross, $totalSCrate, $totalSReduce, $totalSNet, $totalSBirds, $totalSCages, $totalAGross, $totalACrate, $totalAReduce, $totalANet, $totalABirds, $totalACages, $totalGross, $totalCrate, $totalReduce, $totalNet, $totalCrates, $totalBirds, $totalMaleBirds, $totalMaleCages, $totalFemaleBirds, $totalFemaleCages, $totalMixedBirds, $totalMixedCages, $totalCount;
+    global $mapOfHouses, $mapOfWeights, $totalSGross, $totalSCrate, $totalSReduce, $totalSNet, $totalSBirds, $totalSCages, $totalAGross, $totalACrate, $totalAReduce, $totalANet, $totalABirds, $totalACages, $totalGross, $totalCrate, $totalReduce, $totalNet, $totalCrates, $totalBirds, $totalMaleBirds, $totalMaleCages, $totalFemaleBirds, $totalFemaleCages, $totalMixedBirds, $totalMixedCages, $totalCount, $mapOfBirdsToCages;
 
     if (!empty($weightDetails)) {
         $array1 = array(); // group
         $array2 = array(); // house
         $array3 = array(); // houses map
+        $array4 = array(); // birds per cages
 
         foreach ($weightDetails as $element) {
             if (!in_array($element['groupNumber'], $array1)) {
@@ -81,7 +83,7 @@ function rearrangeList($weightDetails) {
             }
             
             $key1 = array_search($element['groupNumber'], $array1);
-    
+
             if (!in_array($element['houseNumber'], $mapOfWeights[$key1]['houseList'])) {
                 $mapOfWeights[$key1]['houses'][] = array(
                     'house' => $element['houseNumber'],
@@ -112,6 +114,20 @@ function rearrangeList($weightDetails) {
             $totalNet += floatval($element['netWeight']);
             $totalCrates += intval($element['numberOfCages']);
             $totalBirds += intval($element['numberOfBirds']);
+
+            $birdsKey = $element['birdsPerCages'];
+
+            if(!in_array($element['birdsPerCages'], $array4)){
+                $mapOfBirdsToCages[] = array( 
+                    'numberOfBirds' => $element['birdsPerCages'],
+                    'count' => 0
+                );
+
+                array_push($array4, $element['birdsPerCages']);
+            } 
+            
+            $keyB = array_search($element['birdsPerCages'], $array4); 
+            $mapOfBirdsToCages[$keyB]['count'] += (int)$element['numberOfCages'];
 
             if ($element['sex'] == 'Male') {
                 $totalMaleBirds += intval($element['numberOfBirds']);
@@ -736,6 +752,44 @@ if(isset($_GET['userID'], $_GET['printType'])){
                                             }
                                         
                                             $message .= '</tbody>
+                                    </table> <br>
+
+                                    <table class="table" style="width: 95%">
+                                        <tbody>
+                                            <tr>
+                                                <th style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;background-color: silver;">Birds/Cage</th>
+                                                <th style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;background-color: silver;">Cages</th>
+                                                <th style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;background-color: silver;">Birds</th>
+                                            </tr>';
+
+                                            if (count($mapOfBirdsToCages) > 0) {
+                                                $totalBirdsInCages = 0;
+                                                $totalCages = 0;
+
+                                                foreach ($mapOfBirdsToCages as $bc) {
+                                                    $message .= '
+                                                        <tr>
+                                                            <td style="width: 25%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.$bc['numberOfBirds'].'</td>
+                                                            <td style="width: 25%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.$bc['count'].'</td>
+                                                            <td style="width: 25%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.((int)$bc['count'] * (int)$bc['numberOfBirds']).'</td>
+                                                        </tr>
+                                                    ';
+                                                    $totalBirdsInCages += ((int)$bc['count'] * (int)$bc['numberOfBirds']);
+                                                    $totalCages += (int)$bc['count'];
+
+                                                }
+
+                                                // Total row for birds/cages
+                                                $message .= '
+                                                        <tr>
+                                                            <td style="width: 25%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;"><b>Total</b></td>
+                                                            <td style="width: 25%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.$totalCages.'</td>
+                                                            <td style="width: 25%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.$totalBirdsInCages.'</td>
+                                                        </tr>
+                                                    ';
+                                            }
+                                        
+                                            $message .= '</tbody>
                                     </table>
                                 </td>
                             </tr>
@@ -1134,6 +1188,8 @@ if(isset($_GET['userID'], $_GET['printType'])){
             $groupMaleBirds = 0;
             $groupFemaleBirds = 0;
             $groupMixedBirds = 0;
+            $groupMapOfBirdsToCages = array();
+            $groupArray3 = array(); 
 
             // Calculate group totals
             foreach ($group['weightList'] as $element) {
@@ -1164,6 +1220,39 @@ if(isset($_GET['userID'], $_GET['printType'])){
                     $groupMixedCages += intval($element['numberOfCages']);
                     $groupMixedBirds += intval($element['numberOfBirds']);
                 }
+
+                // Calculate group-specific birds per cage mapping
+                if($element['birdsPerCages'] != null){
+                    if(!in_array($element['birdsPerCages'], $groupArray3)){
+                        $groupMapOfBirdsToCages[] = array( 
+                            'numberOfBirds' => $element['birdsPerCages'],
+                            'count' => 0
+                        );
+                        array_push($groupArray3, $element['birdsPerCages']);
+                    }
+                }
+                else{
+                    $birdsPerCages = (string)((int)$element['numberOfBirds'] / (int)$element['numberOfCages']);
+                    
+                    if(!in_array($birdsPerCages, $groupArray3)){
+                        $groupMapOfBirdsToCages[] = array( 
+                            'numberOfBirds' => $birdsPerCages,
+                            'count' => 0
+                        );
+                        array_push($groupArray3, $birdsPerCages);
+                    }
+                }
+                
+                if($element['birdsPerCages'] != null){
+                        $keyB = array_search($element['birdsPerCages'], $groupArray3);
+                }
+                else{
+                        $birdsPerCages = (string)((int)$element['numberOfBirds'] / (int)$element['numberOfCages']);
+                        $keyB = array_search($birdsPerCages, $groupArray3);
+                }
+                
+                $groupMapOfBirdsToCages[$keyB]['count'] += (int)$element['numberOfCages'];
+
             }
             $groupNet = $groupGross - $groupTare;
 
@@ -1505,6 +1594,44 @@ if(isset($_GET['userID'], $_GET['printType'])){
                                                         <td style="width: 22%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.number_format($houseAvg, 2, '.', '').'</td>
                                                     </tr>';
                                                 }
+                                            }
+                                        
+                                            $message .= '</tbody>
+                                    </table><br>
+
+                                    <table class="table" style="width: 95%">
+                                        <tbody>
+                                            <tr>
+                                                <th style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;background-color: silver;">Birds/Cage</th>
+                                                <th style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;background-color: silver;">Cages</th>
+                                                <th style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;background-color: silver;">Birds</th>
+                                            </tr>';
+
+                                            if (count($groupMapOfBirdsToCages) > 0) {
+                                                $groupTotalBirdsInCages = 0;
+                                                $groupTotalCages = 0;
+
+                                                foreach ($groupMapOfBirdsToCages as $bc) {
+                                                    $message .= '
+                                                        <tr>
+                                                            <td style="width: 25%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.$bc['numberOfBirds'].'</td>
+                                                            <td style="width: 25%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.$bc['count'].'</td>
+                                                            <td style="width: 25%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.((int)$bc['count'] * (int)$bc['numberOfBirds']).'</td>
+                                                        </tr>
+                                                    ';
+                                                    $groupTotalBirdsInCages += ((int)$bc['count'] * (int)$bc['numberOfBirds']);
+                                                    $groupTotalCages += (int)$bc['count'];
+
+                                                }
+
+                                                // Total row for birds/cages
+                                                $message .= '
+                                                        <tr>
+                                                            <td style="width: 25%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;"><b>Total</b></td>
+                                                            <td style="width: 25%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.$groupTotalCages.'</td>
+                                                            <td style="width: 25%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.$groupTotalBirdsInCages.'</td>
+                                                        </tr>
+                                                    ';
                                             }
                                         
                                             $message .= '</tbody>

@@ -1090,7 +1090,7 @@ if(isset($_GET['userID'], $_GET['printType'])){
                                     <table class="table-full" style="width: 90%;">
                                         <tbody>
                                             <tr>
-                                                <td style="text-align: center;font-size: 14px;"><b>Group Summary</b></td>
+                                                <td style="text-align: center;font-size: 14px;"><b>Birds/Cage</b></td>
                                                 <td style="text-align: center;font-size: 14px;"><b>Cages</b></td>
                                                 <td style="text-align: center;font-size: 14px;"><b>Birds</b></td>
                                             </tr>
