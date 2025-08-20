@@ -204,6 +204,7 @@ if(isset($_GET['userID'], $_GET['printType'])){
                         $compiemail = $rowc['email'] ?? '';
                         $compwebsite = $rowc['website'] ?? '';
                     }
+                    $stmtcomp->close();
 
                     if($row['weighted_by'] != null){
                         if ($select_stmt2 = $db->prepare("select * FROM users WHERE id=?")) {
@@ -217,11 +218,30 @@ if(isset($_GET['userID'], $_GET['printType'])){
                                     $userName = $row2['name'];
                                 }
                             }
+
+                            $select_stmt2->close();
                         }
                     }
                     
                     $companyNameUpper = strtoupper($compname);
                     $showInlineReg = strlen($compname) <= 20;
+
+                    $farmerName = '';
+                    if($row['farm_id'] != null){
+                        if ($farm_stmt = $db->prepare("select * FROM farms WHERE id=?")) {
+                            $farm_stmt->bind_param('s', $row['farm_id']);
+
+                            if ($farm_stmt->execute()) {
+                                $farmResult = $farm_stmt->get_result();
+
+                                if ($farm_row= $farmResult->fetch_assoc()) { 
+                                    $farmerName = $farm_row['name'];
+                                }
+                            }
+
+                            $farm_stmt->close();
+                        }
+                    }
                     
                     $message = '<html>
         <head>
@@ -407,7 +427,7 @@ if(isset($_GET['userID'], $_GET['printType'])){
                             <td style="width: 30%;border-top:0px;padding: 0 0.7rem;">
                                 <p>
                                     <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Farm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </span>
-                                    <span style="font-size: 12px;font-family: sans-serif;">'.$row['farm_id'].'</span>
+                                    <span style="font-size: 12px;font-family: sans-serif;">'.$farmerName.'</span>
                                 </p>
                             </td>
                             <td style="width: 40%;border-top:0px;padding: 0 0.7rem;">
@@ -943,6 +963,8 @@ if(isset($_GET['userID'], $_GET['printType'])){
                         $compwebsite = $rowc['website'] ?? '';
                     }
 
+                    $stmtcomp->close();
+
                     if($row['weighted_by'] != null){
                         if ($select_stmt2 = $db->prepare("select * FROM users WHERE id=?")) {
                             $uid = json_decode($row['weighted_by'], true)[0];
@@ -955,11 +977,30 @@ if(isset($_GET['userID'], $_GET['printType'])){
                                     $userName = $row2['name'];
                                 }
                             }
+
+                            $select_stmt2->close();
                         }
                     }
                     
                     $companyNameUpper = strtoupper($compname);
                     $showInlineReg = strlen($compname) <= 20;
+
+                    $farmerName = '';
+                    if($row['farm_id'] != null){
+                        if ($farm_stmt = $db->prepare("select * FROM farms WHERE id=?")) {
+                            $farm_stmt->bind_param('s', $row['farm_id']);
+
+                            if ($farm_stmt->execute()) {
+                                $farmResult = $farm_stmt->get_result();
+
+                                if ($farm_row= $farmResult->fetch_assoc()) { 
+                                    $farmerName = $farm_row['name'];
+                                }
+                            }
+
+                            $farm_stmt->close();
+                        }
+                    }
 
                     $message = '<html>
         <head>
@@ -1205,7 +1246,7 @@ if(isset($_GET['userID'], $_GET['printType'])){
                                 <td style="width: 30%;border-top:0px;padding: 0 0.7rem;">
                                     <p>
                                         <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Farm &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </span>
-                                        <span style="font-size: 12px;font-family: sans-serif;">'.$row['farm_id'].'</span>
+                                        <span style="font-size: 12px;font-family: sans-serif;">'.$farmerName.'</span>
                                     </p>
                                 </td>
                                 <td style="width: 40%;border-top:0px;padding: 0 0.7rem;">
