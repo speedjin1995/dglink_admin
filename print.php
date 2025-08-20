@@ -62,7 +62,7 @@ function totalWeight($strings){
 }
 
 function rearrangeList($weightDetails) {
-    global $mapOfHouses, $mapOfWeights, $totalSGross, $totalSCrate, $totalSReduce, $totalSNet, $totalSBirds, $totalSCages, $totalAGross, $totalACrate, $totalAReduce, $totalANet, $totalABirds, $totalACages, $totalGross, $totalCrate, $totalReduce, $totalNet, $totalCrates, $totalBirds, $totalMaleBirds, $totalMaleCages, $totalFemaleBirds, $totalFemaleCages, $totalMixedBirds, $totalMixedCages, $totalCount, $mapOfBirdsToCages;
+    global $mapOfHouses, $mapOfWeights, $mapOfBirdsToCages, $totalSGross, $totalSCrate, $totalSReduce, $totalSNet, $totalSBirds, $totalSCages, $totalAGross, $totalACrate, $totalAReduce, $totalANet, $totalABirds, $totalACages, $totalGross, $totalCrate, $totalReduce, $totalNet, $totalCrates, $totalBirds, $totalMaleBirds, $totalMaleCages, $totalFemaleBirds, $totalFemaleCages, $totalMixedBirds, $totalMixedCages, $totalCount;
 
     if (!empty($weightDetails)) {
         $array1 = array(); // group
@@ -114,8 +114,6 @@ function rearrangeList($weightDetails) {
             $totalNet += floatval($element['netWeight']);
             $totalCrates += intval($element['numberOfCages']);
             $totalBirds += intval($element['numberOfBirds']);
-
-            $birdsKey = $element['birdsPerCages'];
 
             if(!in_array($element['birdsPerCages'], $array4)){
                 $mapOfBirdsToCages[] = array( 
