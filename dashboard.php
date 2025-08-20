@@ -187,6 +187,39 @@ else{
         </div>
       </div>
     </div>
+
+    <div class="modal fade" id="printModal">
+      <div class="modal-dialog modal-xl" style="max-width: 50%;">
+        <div class="modal-content">
+          <form role="form" id="printForm">
+            <div class="modal-header bg-gray-dark color-palette">
+              <h4 class="modal-title">Print</h4>
+              <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <div class="modal-body" >
+              <div class="form-group">
+                <input type="hidden" name="userID" id="userID">
+                <input type="hidden" name="isMulti" id="isMulti">
+                <input type="hidden" name="reportType" id="reportType">
+                <label for="printType">Print Type</label>
+                <select class="form-control" id="printType" name="printType">
+                  <option value="Grouped">Grouped</option>
+                  <option value="Ungrouped">Ungrouped</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+              <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" id="saveButton">Save</button>
+            </div>
+          </form>
+        </div> <!-- /.modal-content -->
+      </div> <!-- /.modal-dialog -->
+    </div> <!-- /.modal -->
   </div>
 </div>
 
@@ -260,7 +293,7 @@ $(function () {
                 data: 'serial_no',
                 render: function(data, type, row) {
                     var userId = row.id; // Assuming 'id' is the user ID from the server data
-                    return '<a href="<?=$actual_link?>/chickenweigher/printportrait.php?userID=' + userId + '" target="_blank">' + data + '</a>';
+                    return '<a href="javascript:void(0)" onclick="portrait(' + userId + ')">' + data + '</a>';
                 }
             },
             { data: 'po_no' },
@@ -334,7 +367,7 @@ $(function () {
         data: 'serial_no',
         render: function(data, type, row) {
             var userId = row.id; // Assuming 'id' is the user ID from the server data
-            return '<a href="<?=$actual_link?>/chickenweigher/printportrait.php?userID=' + userId + '" target="_blank">' + data + '</a>';
+            return '<a href="javascript:void(0)" onclick="portrait(' + userId + ')">' + data + '</a>';
         }
       },
       { data: 'po_no' },
@@ -418,7 +451,7 @@ $(function () {
             data: 'serial_no',
             render: function(data, type, row) {
                 var userId = row.id; // Assuming 'id' is the user ID from the server data
-                return '<a href="<?=$actual_link?>/chickenweigher/printportrait.php?userID=' + userId + '" target="_blank">' + data + '</a>';
+                return '<a href="javascript:void(0)" onclick="portrait(' + userId + ')">' + data + '</a>';
             }
         },
         { data: 'po_no' },
@@ -461,6 +494,27 @@ $(function () {
             $(api.column(5).footer()).html(totalBirds);
         }
     });
+  });
+
+  $.validator.setDefaults({
+    submitHandler: function () {
+      if($('#printModal').hasClass('show')){
+        var userID = $('#printModal').find('#userID').val();
+        var isMulti = $('#printModal').find('#isMulti').val();
+        var reportType = $('#printModal').find('#reportType').val();
+        var printType = $('#printModal').find('#printType').val();
+
+        if (reportType == 'Farm' && isMulti == 'N') {
+          window.open('<?=$actual_link?>/chickenweigher/print.php?userID=' + userID + '&printType=' + printType, '_blank');
+        } else if (reportType == 'Office' && isMulti == 'N') {
+          window.open('<?=$actual_link?>/chickenweigher/printportrait.php?userID=' + userID + '&printType=' + printType, '_blank');
+        } else if (reportType == 'Farm' && isMulti == "Y"){
+          window.open("php/print.php?ids="+userID+"&printType="+printType, '_blank');
+        } else if (reportType == 'Office' && isMulti == "Y") {
+          window.open("php/printportrait.php?ids="+userID+"&printType="+printType, '_blank');
+        }
+      }
+    }
   });
 });
 
@@ -696,24 +750,42 @@ function print2(id) {
 }
 
 function portrait(id) {
-  $.post('php/printportrait.php', {userID: id, file: 'weight'}, function(data){
-    var obj = JSON.parse(data);
+  $('#printModal').find('#userID').val(id);
+  $('#printModal').find('#isMulti').val('N');
+  $('#printModal').find('#reportType').val('Office');
+  $('#printModal').modal('show');
 
-    if(obj.status === 'success'){
-      var printWindow = window.open('', '', 'height=400,width=800');
-      printWindow.document.write(obj.message);
-      printWindow.document.close();
-      setTimeout(function(){
-        printWindow.print();
-        printWindow.close();
-      }, 500);
-    }
-    else if(obj.status === 'failed'){
-      toastr["error"](obj.message, "Failed:");
-    }
-    else{
-      toastr["error"]("Something wrong when activate", "Failed:");
+  $('#printForm').validate({
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+      error.addClass('invalid-feedback');
+      element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass('is-invalid');
     }
   });
+  // $.post('php/printportrait.php', {userID: id, file: 'weight'}, function(data){
+  //   var obj = JSON.parse(data);
+
+  //   if(obj.status === 'success'){
+  //     var printWindow = window.open('', '', 'height=400,width=800');
+  //     printWindow.document.write(obj.message);
+  //     printWindow.document.close();
+  //     setTimeout(function(){
+  //       printWindow.print();
+  //       printWindow.close();
+  //     }, 500);
+  //   }
+  //   else if(obj.status === 'failed'){
+  //     toastr["error"](obj.message, "Failed:");
+  //   }
+  //   else{
+  //     toastr["error"]("Something wrong when activate", "Failed:");
+  //   }
+  // });
 }
 </script>
