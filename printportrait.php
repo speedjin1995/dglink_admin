@@ -640,21 +640,63 @@ if(isset($_GET['userID'], $_GET['printType'])){
                 }*/
                 
                 $message .= '</div>
-                <button id="print-button" onclick="printPreview()">Print Preview</button>
+                <!--button id="print-button" onclick="printPreview()">Print Preview</button-->
             </body>
         </html>';
 
                     echo $message;
-                    echo "<script>
-                        function printPreview() {
-                            document.getElementById('print-button').style.display = 'none';
-                            setTimeout(() => {
-                                document.title = 'F-".$row['po_no']."_".substr($row['customer'], 0, 15)."_".$row['serial_no']."';
-                                window.print();
-                                window.close();
-                            }, 100);
-                        }
-                    </script>";
+                    echo '
+                        <script src="plugins/jquery/jquery.min.js"></script>
+                        <script src="plugins/jquery-validation/jquery.validate.min.js"></script>
+
+                        <script>
+                            $(document).ready(function () {
+                                PagedPolyfill.preview().then(() => {
+                                    const buttonWrapper = document.createElement("div");
+                                    buttonWrapper.className = "print-button-wrapper";
+                                    buttonWrapper.setAttribute("data-pagedjs-ignore", "");
+                                    buttonWrapper.style.position = "fixed";
+                                    buttonWrapper.style.bottom = "20px";
+                                    buttonWrapper.style.left = "50%";
+                                    buttonWrapper.style.transform = "translateX(-50%)";
+                                    buttonWrapper.style.zIndex = "9999";
+
+                                    const printButton = document.createElement("button");
+                                    printButton.textContent = "🖨️ Print Preview";
+                                    printButton.style.background = "#007bff"; // Bootstrap blue
+                                    printButton.style.color = "#fff";
+                                    printButton.style.border = "none";
+                                    printButton.style.padding = "10px 20px";
+                                    printButton.style.borderRadius = "6px";
+                                    printButton.style.cursor = "pointer";
+                                    printButton.style.fontSize = "14px";
+                                    printButton.style.fontWeight = "500";
+                                    printButton.style.fontFamily = "Segoe UI, sans-serif";
+                                    printButton.style.boxShadow = "0 2px 6px rgba(0,0,0,0.15)";
+                                    printButton.style.transition = "background 0.3s ease";
+
+                                    printButton.onmouseover = () => {
+                                        printButton.style.background = "#0056b3"; // darker on hover
+                                    };
+                                    printButton.onmouseout = () => {
+                                        printButton.style.background = "#007bff";
+                                    };
+
+                                    printButton.onclick = function () {
+                                        buttonWrapper.style.display = "none";
+                                        setTimeout(() => {
+                                            document.title = "'.$fileName.'";
+                                            window.print();
+                                            window.close();
+                                        }, 100);
+                                    };
+
+                                    buttonWrapper.appendChild(printButton);
+                                    document.body.appendChild(buttonWrapper);
+                                });
+                            });
+                        </script>
+                    ';
                 }
                 else{
                     echo json_encode(
@@ -1184,16 +1226,58 @@ if(isset($_GET['userID'], $_GET['printType'])){
         $message .= '</body></html>';
                     
         echo $message;
-        echo "<script>
-            function printPreview() {
-                document.getElementById('print-button').style.display = 'none';
-                setTimeout(() => {
-                    document.title = 'F-".$row['po_no']."_".substr($row['customer'], 0, 15)."_".$row['serial_no']."';
-                    window.print();
-                    window.close();
-                }, 100);
-            }
-        </script>";
+        echo '
+            <script src="plugins/jquery/jquery.min.js"></script>
+            <script src="plugins/jquery-validation/jquery.validate.min.js"></script>
+
+            <script>
+                $(document).ready(function () {
+                    PagedPolyfill.preview().then(() => {
+                        const buttonWrapper = document.createElement("div");
+                        buttonWrapper.className = "print-button-wrapper";
+                        buttonWrapper.setAttribute("data-pagedjs-ignore", "");
+                        buttonWrapper.style.position = "fixed";
+                        buttonWrapper.style.bottom = "20px";
+                        buttonWrapper.style.left = "50%";
+                        buttonWrapper.style.transform = "translateX(-50%)";
+                        buttonWrapper.style.zIndex = "9999";
+
+                        const printButton = document.createElement("button");
+                        printButton.textContent = "🖨️ Print Preview";
+                        printButton.style.background = "#007bff"; // Bootstrap blue
+                        printButton.style.color = "#fff";
+                        printButton.style.border = "none";
+                        printButton.style.padding = "10px 20px";
+                        printButton.style.borderRadius = "6px";
+                        printButton.style.cursor = "pointer";
+                        printButton.style.fontSize = "14px";
+                        printButton.style.fontWeight = "500";
+                        printButton.style.fontFamily = "Segoe UI, sans-serif";
+                        printButton.style.boxShadow = "0 2px 6px rgba(0,0,0,0.15)";
+                        printButton.style.transition = "background 0.3s ease";
+
+                        printButton.onmouseover = () => {
+                            printButton.style.background = "#0056b3"; // darker on hover
+                        };
+                        printButton.onmouseout = () => {
+                            printButton.style.background = "#007bff";
+                        };
+
+                        printButton.onclick = function () {
+                            buttonWrapper.style.display = "none";
+                            setTimeout(() => {
+                                document.title = "'.$fileName.'";
+                                window.print();
+                                window.close();
+                            }, 100);
+                        };
+
+                        buttonWrapper.appendChild(printButton);
+                        document.body.appendChild(buttonWrapper);
+                    });
+                });
+            </script>
+        ';
                 }
                 else{
                     echo json_encode(
