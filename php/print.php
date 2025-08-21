@@ -762,7 +762,7 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                 </div>
 
                                 <div class="page-content">
-                                    <table class="table">
+                                    <table class="table" style="margin-bottom: 10px;">
                                         <tbody>
                                             <tr style="border-top: 1px solid #000000;border-bottom: 1px solid #000000;font-family: sans-serif;">
                                                 <td style="width: 20%;border-top:0px;padding: 0 0.7rem;">
@@ -1457,7 +1457,7 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                     </div>
 
                                     <div class="page-content">
-                                        <table class="table">
+                                        <table class="table" style="margin-bottom: 10px;">
                                             <tbody>
                                                 <tr style="border-top: 1px solid #000000;border-bottom: 1px solid #000000;font-family: sans-serif;">
                                                     <td style="width: 20%;border-top:0px;padding: 0 0.7rem;">
