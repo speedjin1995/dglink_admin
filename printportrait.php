@@ -177,6 +177,23 @@ if(isset($_GET['userID'], $_GET['printType'])){
                     $companyNameUpper = strtoupper($compname);
                     $showInlineReg = strlen($compname) <= 20;
 
+                    $farmerName = '';
+                    if($row['farm_id'] != null){
+                        if ($farm_stmt = $db->prepare("select * FROM farms WHERE id=?")) {
+                            $farm_stmt->bind_param('s', $row['farm_id']);
+
+                            if ($farm_stmt->execute()) {
+                                $farmResult = $farm_stmt->get_result();
+
+                                if ($farm_row= $farmResult->fetch_assoc()) { 
+                                    $farmerName = $farm_row['name'];
+                                }
+                            }
+
+                            $farm_stmt->close();
+                        }
+                    }
+
                     $message = '<html>
         <head>
             <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
@@ -368,7 +385,7 @@ if(isset($_GET['userID'], $_GET['printType'])){
                             <td style="width: 50%;border-top:0px;padding: 0 0.7rem;">
                                 <p>
                                     <span style="font-size: 14px;font-family: sans-serif;font-weight: bold;">Farm : </span>
-                                    <span style="font-size: 14px;font-family: sans-serif;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$row['farmer_name'].'</span>
+                                    <span style="font-size: 14px;font-family: sans-serif;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$farmerName.'</span>
                                 </p>
                             </td>
                             <td style="width: 50%;border-top:0px;padding: 0 0.7rem;">
@@ -783,6 +800,23 @@ if(isset($_GET['userID'], $_GET['printType'])){
                     $companyNameUpper = strtoupper($compname);
                     $showInlineReg = strlen($compname) <= 20;
 
+                    $farmerName = '';
+                    if($row['farm_id'] != null){
+                        if ($farm_stmt = $db->prepare("select * FROM farms WHERE id=?")) {
+                            $farm_stmt->bind_param('s', $row['farm_id']);
+
+                            if ($farm_stmt->execute()) {
+                                $farmResult = $farm_stmt->get_result();
+
+                                if ($farm_row= $farmResult->fetch_assoc()) { 
+                                    $farmerName = $farm_row['name'];
+                                }
+                            }
+
+                            $farm_stmt->close();
+                        }
+                    }
+
                     $message = '<html>
         <head>
             <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
@@ -1049,7 +1083,7 @@ if(isset($_GET['userID'], $_GET['printType'])){
                                 <td style="width: 50%;border-top:0px;padding: 0 0.7rem;">
                                     <p>
                                         <span style="font-size: 14px;font-family: sans-serif;font-weight: bold;">Farm : </span>
-                                        <span style="font-size: 14px;font-family: sans-serif;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$row['farmer_name'].'</span>
+                                        <span style="font-size: 14px;font-family: sans-serif;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$farmerName.'</span>
                                     </p>
                                 </td>
                                 <td style="width: 50%;border-top:0px;padding: 0 0.7rem;">
