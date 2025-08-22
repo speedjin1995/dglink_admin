@@ -201,7 +201,20 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                 
             }
 
-            /* Ensure page numbers are visible */
+            .keep-with-next {
+                break-after: avoid-page;
+                page-break-after: avoid;
+            }
+
+            .avoid-break {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            table.avoid-break {
+                break-inside: avoid;
+            }
+
             .page-number, .total-pages {
                 font-weight: bold;
                 color: #000;
@@ -575,6 +588,59 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                             </tr>
                                         </tbody>
                                     </table>
+
+                                    <table class="table">
+                                        <tbody>
+                                            <tr style="border-top: 1px solid #000000;border-bottom: 1px solid #000000;font-family: sans-serif;">
+                                                <td style="width: 20%;border-top:0px;padding: 0 0.7rem;">
+                                                    <p>
+                                                        <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Crate No.  </span>
+                                                    </p>
+                                                </td>
+                                                <td colspan="10" style="width: 80%;border-top:0px;padding: 0 0.7rem;">
+                                                    <p>
+                                                        <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Weight (kg) / Sample Crate </span>
+                                                    </p>
+                                                </td>
+                                            </tr>';
+                                            
+                                            $countCage = 1;
+                                            $indexCount2 = 11;
+                                            $indexStringCage = '<tr><td style="border-top:0px;padding: 0 0.7rem;">
+                                                <p>
+                                                    <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">1</span>
+                                                </p>
+                                            </td>';
+                                            
+                                            foreach ($cage_data as $cage) {
+                                                if ($countCage < 10) {
+                                                    $indexStringCage .= '<td style="border-top:0px;padding: 0 0.7rem;">
+                                                        <p>
+                                                            <span style="font-size: 12px;font-family: sans-serif;">' . str_replace('kg', '', $cage['data']) .  '/' . $cage['number'] . '</span>
+                                                        </p>
+                                                    </td>';
+                                                    $countCage++;
+                                                }
+                                                else {
+                                                    $indexStringCage .= '<td style="border-top:0px;padding: 0 0.7rem;">
+                                                        <p>
+                                                            <span style="font-size: 12px;font-family: sans-serif;">' . str_replace('kg', '', $cage['data']) . '/' . $cage['number'] . '</span>
+                                                        </p>
+                                                    </td></tr>'; // Move this line outside of the else block
+                                                    $countCage = 1;
+                                                }
+                                            }
+                            
+                                            if ($countCage > 0) {
+                                                for ($k = 0; $k <= (10 - $countCage); $k++) {
+                                                    $indexStringCage .= '<td style="border-top:0px;padding: 0 0.7rem;"><p><span style="font-size: 12px;font-family: sans-serif;"></span></p></td>';
+                                                }
+                                                $indexStringCage .= '</tr>';
+                                            }
+                            
+                                            $message .= $indexStringCage;
+                                        $message .= '</tbody>
+                                    </table>
                                 </div>
 
                                 <div class="page-footer">
@@ -761,68 +827,16 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                     </table>
                                 </div>
 
-                                <div class="page-content">
-                                    <table class="table" style="margin-bottom: 10px;">
-                                        <tbody>
-                                            <tr style="border-top: 1px solid #000000;border-bottom: 1px solid #000000;font-family: sans-serif;">
-                                                <td style="width: 20%;border-top:0px;padding: 0 0.7rem;">
-                                                    <p>
-                                                        <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Crate No.  </span>
-                                                    </p>
-                                                </td>
-                                                <td colspan="10" style="width: 80%;border-top:0px;padding: 0 0.7rem;">
-                                                    <p>
-                                                        <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Weight (kg) / Sample Crate </span>
-                                                    </p>
-                                                </td>
-                                            </tr>';
-                                            
-                                            $countCage = 1;
-                                            $indexCount2 = 11;
-                                            $indexStringCage = '<tr><td style="border-top:0px;padding: 0 0.7rem;">
-                                                <p>
-                                                    <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">1</span>
-                                                </p>
-                                            </td>';
-                                            
-                                            foreach ($cage_data as $cage) {
-                                                if ($countCage < 10) {
-                                                    $indexStringCage .= '<td style="border-top:0px;padding: 0 0.7rem;">
-                                                        <p>
-                                                            <span style="font-size: 12px;font-family: sans-serif;">' . str_replace('kg', '', $cage['data']) .  '/' . $cage['number'] . '</span>
-                                                        </p>
-                                                    </td>';
-                                                    $countCage++;
-                                                }
-                                                else {
-                                                    $indexStringCage .= '<td style="border-top:0px;padding: 0 0.7rem;">
-                                                        <p>
-                                                            <span style="font-size: 12px;font-family: sans-serif;">' . str_replace('kg', '', $cage['data']) . '/' . $cage['number'] . '</span>
-                                                        </p>
-                                                    </td></tr>'; // Move this line outside of the else block
-                                                    $countCage = 1;
-                                                }
-                                            }
-                            
-                                            if ($countCage > 0) {
-                                                for ($k = 0; $k <= (10 - $countCage); $k++) {
-                                                    $indexStringCage .= '<td style="border-top:0px;padding: 0 0.7rem;"><p><span style="font-size: 12px;font-family: sans-serif;"></span></p></td>';
-                                                }
-                                                $indexStringCage .= '</tr>';
-                                            }
-                            
-                                            $message .= $indexStringCage;
-                                        $message .= '</tbody>
-                                    </table>';
-                    
+                                <div class="page-content">';
                                     if (!empty($mapOfWeights)) {
                                         foreach ($mapOfWeights as $group) {
-                                            $message .= '<p style="margin: 0px;"><u style="color: blue;">Group No. ' . $group['groupNumber'] . '</u></p>';
+                                            $message .= '<p class="keep-with-next" style="margin: 0px;"><u style="color: blue;">Group No. ' . $group['groupNumber'] . '</u></p>';
                                     
                                             if (isset($group['houses']) && is_array($group['houses'])) {
                                                 foreach ($group['houses'] as $house) {
+                                                    $message .= '<div class="avoid-break">';
                                                     $message .= '<p style="margin: 0px;">House ' . $house['house'] . '</p>';
-                                                    $message .= '<table class="table">';
+                                                    $message .= '<table class="table avoid-break">';
                                                     $message .= '<tbody>';
                                                     $message .= '<tr  style="border-top: 1px solid #000000;border-bottom: 1px solid #000000;font-family: sans-serif;">';
                                                     $message .= '<td style="width: 20%;border-top:0px;padding: 0 0.7rem;"><p>
@@ -887,6 +901,7 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                     
                                                     $message .= $indexString;
                                                     $message .= '</tbody></table><br>';
+                                                    $message .= '</div>';
                                                 }
                                             }
                                     
@@ -1266,6 +1281,59 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                                 </tr>
                                             </tbody>
                                         </table>
+
+                                        <table class="table">
+                                            <tbody>
+                                                <tr style="border-top: 1px solid #000000;border-bottom: 1px solid #000000;font-family: sans-serif;">
+                                                    <td style="width: 20%;border-top:0px;padding: 0 0.7rem;">
+                                                        <p>
+                                                            <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Crate No.  </span>
+                                                        </p>
+                                                    </td>
+                                                    <td colspan="10" style="width: 80%;border-top:0px;padding: 0 0.7rem;">
+                                                        <p>
+                                                            <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Weight (kg) / Sample Crate </span>
+                                                        </p>
+                                                    </td>
+                                                </tr>';
+                                                
+                                                $countCage = 1;
+                                                $indexCount2 = 11;
+                                                $indexStringCage = '<tr><td style="border-top:0px;padding: 0 0.7rem;">
+                                                    <p>
+                                                        <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">1</span>
+                                                    </p>
+                                                </td>';
+                                                
+                                                foreach ($cage_data as $cage) {
+                                                    if ($countCage < 10) {
+                                                        $indexStringCage .= '<td style="border-top:0px;padding: 0 0.7rem;">
+                                                            <p>
+                                                                <span style="font-size: 12px;font-family: sans-serif;">' . str_replace('kg', '', $cage['data']) .  '/' . $cage['number'] . '</span>
+                                                            </p>
+                                                        </td>';
+                                                        $countCage++;
+                                                    }
+                                                    else {
+                                                        $indexStringCage .= '<td style="border-top:0px;padding: 0 0.7rem;">
+                                                            <p>
+                                                                <span style="font-size: 12px;font-family: sans-serif;">' . str_replace('kg', '', $cage['data']) . '/' . $cage['number'] . '</span>
+                                                            </p>
+                                                        </td></tr>'; // Move this line outside of the else block
+                                                        $countCage = 1;
+                                                    }
+                                                }
+                                
+                                                if ($countCage > 0) {
+                                                    for ($k = 0; $k <= (10 - $countCage); $k++) {
+                                                        $indexStringCage .= '<td style="border-top:0px;padding: 0 0.7rem;"><p><span style="font-size: 12px;font-family: sans-serif;"></span></p></td>';
+                                                    }
+                                                    $indexStringCage .= '</tr>';
+                                                }
+                                
+                                                $message .= $indexStringCage;
+                                            $message .= '</tbody>
+                                        </table>
                                     </div>
 
                                     <div class="page-footer">
@@ -1456,60 +1524,7 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                         </table>
                                     </div>
 
-                                    <div class="page-content">
-                                        <table class="table" style="margin-bottom: 10px;">
-                                            <tbody>
-                                                <tr style="border-top: 1px solid #000000;border-bottom: 1px solid #000000;font-family: sans-serif;">
-                                                    <td style="width: 20%;border-top:0px;padding: 0 0.7rem;">
-                                                        <p>
-                                                            <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Crate No.  </span>
-                                                        </p>
-                                                    </td>
-                                                    <td colspan="10" style="width: 80%;border-top:0px;padding: 0 0.7rem;">
-                                                        <p>
-                                                            <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Weight (kg) / Sample Crate </span>
-                                                        </p>
-                                                    </td>
-                                                </tr>';
-                                                
-                                                $countCage = 1;
-                                                $indexCount2 = 11;
-                                                $indexStringCage = '<tr><td style="border-top:0px;padding: 0 0.7rem;">
-                                                    <p>
-                                                        <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">1</span>
-                                                    </p>
-                                                </td>';
-                                                
-                                                foreach ($cage_data as $cage) {
-                                                    if ($countCage < 10) {
-                                                        $indexStringCage .= '<td style="border-top:0px;padding: 0 0.7rem;">
-                                                            <p>
-                                                                <span style="font-size: 12px;font-family: sans-serif;">' . str_replace('kg', '', $cage['data']) .  '/' . $cage['number'] . '</span>
-                                                            </p>
-                                                        </td>';
-                                                        $countCage++;
-                                                    }
-                                                    else {
-                                                        $indexStringCage .= '<td style="border-top:0px;padding: 0 0.7rem;">
-                                                            <p>
-                                                                <span style="font-size: 12px;font-family: sans-serif;">' . str_replace('kg', '', $cage['data']) . '/' . $cage['number'] . '</span>
-                                                            </p>
-                                                        </td></tr>'; // Move this line outside of the else block
-                                                        $countCage = 1;
-                                                    }
-                                                }
-                                
-                                                if ($countCage > 0) {
-                                                    for ($k = 0; $k <= (10 - $countCage); $k++) {
-                                                        $indexStringCage .= '<td style="border-top:0px;padding: 0 0.7rem;"><p><span style="font-size: 12px;font-family: sans-serif;"></span></p></td>';
-                                                    }
-                                                    $indexStringCage .= '</tr>';
-                                                }
-                                
-                                                $message .= $indexStringCage;
-                                            $message .= '</tbody>
-                                        </table><br>';
-                        
+                                    <div class="page-content">';
                                         // Display only the current group data
                                         $message .= '<p style="margin: 0px;"><u style="color: blue;">Group No. ' . $group['groupNumber'] . '</u></p>';
                                 
