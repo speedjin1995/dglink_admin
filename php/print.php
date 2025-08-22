@@ -961,6 +961,9 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                         $totalFemaleCages = 0;
                         $totalMixedBirds = 0;
                         $totalMixedCages = 0;
+                        $groupTotalNet = 0.0;
+                        $groupTotalGross = 0.0;
+                        $groupTotalCrate = 0.0;
 
                         // Newly assigned
                         $assigned_seconds = strtotime ($row['start_time']);
@@ -1060,6 +1063,11 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                             $groupMaleBirds = 0;
                             $groupFemaleBirds = 0;
                             $groupMixedBirds = 0;
+                            $groupTotalSGross = 0.0;
+                            $groupTotalAGross = 0.0;
+                            $groupTotalGross = 0.0;
+                            $groupTotalSCrate = 0.0;
+                            $groupTotalACrate = 0.0;
                             $groupMapOfBirdsToCages = array();
                             $groupArray3 = array(); 
 
