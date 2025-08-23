@@ -1183,8 +1183,9 @@ if(isset($_GET['userID'], $_GET['printType'])){
         </head><body>';
 
         // Create separate page for each group
+        $groupNumber = 0;
         foreach ($mapOfWeights as $groupIndex => $group) {
-            $groupNumber = $group['groupNumber'];
+            $groupNumber++;
             $groupCrates = 0;
             $groupBirds = 0;
             $groupGross = 0.0;
