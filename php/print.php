@@ -1134,7 +1134,7 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                 $groupMapOfBirdsToCages[$keyB]['count'] += (int)$element['numberOfCages'];
                             }
                             
-                            $groupTotalNet = $groupTotalGross - $groupTotalCrate;
+                            $groupNet = $groupGross - $groupTare;
 
                             $message .= '
                                 <section class="record">
@@ -1441,9 +1441,9 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                                                 $message.= '</tr>
                                                                 <tr>
                                                                     <td style="width: 40%;border-top:0px;padding: 0 0.7rem;font-size: 12px;font-family: sans-serif;font-weight: bold;">Nett Wt (kg)</td>
-                                                                    <td style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.number_format($groupTotalSGross - $groupTotalSCrate, 2, '.', '').'</td>
-                                                                    <td style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.number_format($groupTotalAGross - $groupTotalACrate, 2, '.', '').'</td>
-                                                                    <td style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.number_format($groupTotalGross - $groupTotalCrate, 2, '.', '').'</td>
+                                                                    <td style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.number_format($groupSGross - $groupSCrate, 2, '.', '').'</td>
+                                                                    <td style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.number_format($groupAGross - $groupACrate, 2, '.', '').'</td>
+                                                                    <td style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.number_format($groupNet, 2, '.', '').'</td>
                                                                 </tr>
                                                             </tbody>
                                                         </table><br>
