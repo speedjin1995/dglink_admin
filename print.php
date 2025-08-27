@@ -392,14 +392,16 @@ if(isset($_GET['userID'], $_GET['printType'])){
                                 <tr>
                                     <td style="width: 60%;border-top: 0px;">
                                         <p>';
+                                            $companyFontSize = (mb_strlen($companyNameUpper) > 20) ? '16px' : '20px';
+
                                             if ($showInlineReg) {
                                                 $message .= '
-                                                                <span style="font-weight: bold; font-size: 20px;">' . $companyNameUpper . '</span>
-                                                                <span style="font-size: 12px;"> ' . $compreg . '</span><br>';
+                                                                <span style="font-weight: bold; font-size: ' . $companyFontSize . ';">' . $companyNameUpper . '</span>
+                                                                <span style="font-size: 12px;"> (' . $compreg . ')</span><br>';
                                             } else {
                                                 $message .= '
-                                                                <span style="font-weight: bold; font-size: 20px;">' . $companyNameUpper . '</span><br>
-                                                                <span style="font-size: 12px;">' . $compreg . '</span><br>';
+                                                                <span style="font-weight: bold; font-size: ' . $companyFontSize . ';">' . $companyNameUpper . '</span>
+                                                                <span style="font-size: 12px;"> (' . $compreg . ')</span><br>';
                                             }
                                             
                                             // Address & contact info
@@ -421,7 +423,7 @@ if(isset($_GET['userID'], $_GET['printType'])){
                                     </td>
                                 </tr>
                             </tbody>
-                        </table><br>';
+                        </table>';
                         
                         $message .= '<table class="table">
                             <tbody>
@@ -761,9 +763,16 @@ if(isset($_GET['userID'], $_GET['printType'])){
                                                     }
                                                 
                                                     $message .= '</tbody>
-                                            </table>
+                                            </table>';
 
-                                            <table class="table" style="width: 70%; margin-top: 80%; margin-left: 35px">
+                                            if (count($mapOfHouses) > 3){
+                                                $birdPerCageMargin = "45%";
+                                            }else{
+                                                $birdPerCageMargin = "80%";
+                                            }
+                                            
+                                            $message.= '
+                                            <table class="table" style="width: 70%; margin-top: '.$birdPerCageMargin.'; margin-left: 35px">
                                                 <tbody>
                                                     <tr>
                                                         <th style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;background-color: silver;">Birds/Cage</th>
@@ -1284,14 +1293,16 @@ if(isset($_GET['userID'], $_GET['printType'])){
                             <tr>
                                 <td style="width: 60%;border-top: 0px;">
                                     <p>';
+                                        $companyFontSize = (mb_strlen($companyNameUpper) > 20) ? '16px' : '20px';
+
                                         if ($showInlineReg) {
                                             $message .= '
-                                            <span style="font-weight: bold; font-size: 20px;">' . $companyNameUpper . '</span>
-                                            <span style="font-size: 12px;"> ' . $compreg . '</span><br>';
+                                            <span style="font-weight: bold; font-size: ' . $companyFontSize . ';">' . $companyNameUpper . '</span>
+                                            <span style="font-size: 12px;"> (' . $compreg . ')</span><br>';
                                         } else {
                                             $message .= '
-                                            <span style="font-weight: bold; font-size: 20px;">' . $companyNameUpper . '</span><br>
-                                            <span style="font-size: 12px;">' . $compreg . '</span><br>';
+                                            <span style="font-weight: bold; font-size: ' . $companyFontSize . ';">' . $companyNameUpper . '</span>
+                                            <span style="font-size: 12px;"> (' . $compreg . ')</span><br>';
                                         }
                                         
                                         // Address & contact info
@@ -1314,7 +1325,7 @@ if(isset($_GET['userID'], $_GET['printType'])){
                                 </td>
                             </tr>
                         </tbody>
-                    </table><br>';
+                    </table>';
                     
                     $message .= '<table class="table">
                         <tbody>
@@ -1459,7 +1470,7 @@ if(isset($_GET['userID'], $_GET['printType'])){
                                 </td>
                             </tr>
                         </tbody>
-                    </table><br>
+                    </table>
                 </div>';
 
             // Add page footer for this group
@@ -1607,9 +1618,16 @@ if(isset($_GET['userID'], $_GET['printType'])){
                                                     }
                                                 
                                                     $message .= '</tbody>
-                                            </table><br><br><br><br>
+                                            </table>';
 
-                                            <table class="table" style="width: 70%; margin-top: 10px; margin-left: 35px">
+                                            if (count($group['houses']) > 3){
+                                                $birdPerCageMargin = "45%";
+                                            }else{
+                                                $birdPerCageMargin = "110%";
+                                            }
+                                            
+                                            $message.= '
+                                            <table class="table" style="width: 70%; margin-top: '.$birdPerCageMargin.'; margin-left: 35px">
                                                 <tbody>
                                                     <tr>
                                                         <th style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;background-color: silver;">Birds/Cage</th>
