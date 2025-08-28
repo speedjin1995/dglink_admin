@@ -412,14 +412,16 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                             <tr>
                                                 <td style="width: 60%;border-top: 0px;">
                                                     <p>';
+                                                        $companyFontSize = (mb_strlen($companyNameUpper) > 20) ? '16px' : '20px';
+
                                                         if ($showInlineReg) {
                                                             $message .= '
-                                                                <span style="font-weight: bold; font-size: 18px;">' . $companyNameUpper . '</span>
-                                                                <span style="font-size: 12px;"> ' . $compreg . '</span><br>';
+                                                                <span style="font-weight: bold; font-size: '.$companyFontSize.';">' . $companyNameUpper . '</span>
+                                                                <span style="font-size: 12px;"> (' . $compreg . ')</span><br>';
                                                         } else {
                                                             $message .= '
-                                                                <span style="font-weight: bold; font-size: 18px;">' . $companyNameUpper . '</span><br>
-                                                                <span style="font-size: 12px;">' . $compreg . '</span><br>';
+                                                                <span style="font-weight: bold; font-size: '.$companyFontSize.';">' . $companyNameUpper . '</span>
+                                                                <span style="font-size: 12px;"> (' . $compreg . ')</span><br>';
                                                         }
                                                         
                                                         // Address & contact info
@@ -782,8 +784,16 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                                                 }
                                                             
                                                                 $message .= '</tbody>
-                                                        </table>
-                                                        <table class="table" style="width: 70%; margin-top: 80%; margin-left: 30px;">
+                                                        </table>';
+
+                                                        if (count($mapOfHouses) > 3){
+                                                            $birdPerCageMargin = "45%";
+                                                        }else{
+                                                            $birdPerCageMargin = "80%";
+                                                        }
+                                                        
+                                                        $message.= '
+                                                        <table class="table" style="width: 70%; margin-top: '.$birdPerCageMargin.'; margin-left: 35px">
                                                             <tbody>
                                                                 <tr>
                                                                     <th style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;background-color: silver;">Birds/Cage</th>
@@ -1144,14 +1154,16 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                                 <tr>
                                                     <td style="width: 60%;border-top: 0px;">
                                                         <p>';
+                                                            $companyFontSize = (mb_strlen($companyNameUpper) > 20) ? '16px' : '20px';
+
                                                             if ($showInlineReg) {
                                                                 $message .= '
-                                                                    <span style="font-weight: bold; font-size: 18px;">' . $companyNameUpper . '</span>
-                                                                    <span style="font-size: 12px;"> ' . $compreg . '</span><br>';
+                                                                    <span style="font-weight: bold; font-size: '.$companyFontSize.';">' . $companyNameUpper . '</span>
+                                                                    <span style="font-size: 12px;"> (' . $compreg . ')</span><br>';
                                                             } else {
                                                                 $message .= '
-                                                                    <span style="font-weight: bold; font-size: 18px;">' . $companyNameUpper . '</span><br>
-                                                                    <span style="font-size: 12px;">' . $compreg . '</span><br>';
+                                                                    <span style="font-weight: bold; font-size: '.$companyFontSize.';">' . $companyNameUpper . '</span>
+                                                                    <span style="font-size: 12px;">(' . $compreg . ')</span><br>';
                                                             }
                                                             
                                                             // Address & contact info
@@ -1293,7 +1305,7 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                                     <td style="width: 30%;border-top:0px;padding: 0 0.7rem;">
                                                         <p>
                                                             <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Nett Wt (kg) &nbsp;&nbsp;: </span>
-                                                            <span style="font-size: 12px;font-family: sans-serif;">'.(string)number_format(($totalGross - $totalCrate), 2).'</span>
+                                                            <span style="font-size: 12px;font-family: sans-serif;">'.(string)number_format($groupNet, 2).'</span>
                                                         </p>
                                                     </td>
                                                     <td style="width: 40%;border-top:0px;padding: 0 0.7rem;">
@@ -1519,8 +1531,16 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                                                     }
                                                                 
                                                                     $message .= '</tbody>
-                                                            </table>
-                                                            <table class="table" style="width: 70%; margin-top: 80%; margin-left: 30px;">
+                                                            </table>';
+
+                                                        if (count($group['houses']) > 3){
+                                                            $birdPerCageMargin = "45%";
+                                                        }else{
+                                                            $birdPerCageMargin = "110%";
+                                                        }
+                                                        
+                                                        $message.= '
+                                                        <table class="table" style="width: 70%; margin-top: '.$birdPerCageMargin.'; margin-left: 35px">
                                                             <tbody>
                                                                 <tr>
                                                                     <th style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;background-color: silver;">Birds/Cage</th>
