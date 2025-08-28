@@ -542,7 +542,7 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                                 <td style="width: 30%;border-top:0px;padding: 0 0.7rem;">
                                                     <p>
                                                         <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Crate Wt (kg) : </span>
-                                                        <span style="font-size: 12px;font-family: sans-serif;">'.(string)number_format(($totalCrate / $totalCrates), 2).'</span>
+                                                        <span style="font-size: 12px;font-family: sans-serif;">'.($totalCrates > 0 ? (string)number_format($totalCrate / $totalCrates, 2) : '0.00').'</span>
                                                     </p>
                                                 </td>
                                                 <td style="width: 40%;border-top:0px;padding: 0 0.7rem;">
@@ -691,21 +691,21 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                                                     $message .= '<td style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">0.00</td>';
                                                                 }
                                                                 else{
-                                                                    $message .= '<td style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.number_format($totalSNet/$totalSBirds, 2, '.', '').'</td>';
+                                                                    $message .= '<td style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">' . ($totalSBirds > 0 ? number_format($totalSNet / $totalSBirds, 2, '.', '') : '0.00') . '</td>';
                                                                 }
                                                                 
                                                                 if($totalACages <= 0){
                                                                     $message .= '<td style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">0.00</td>';
                                                                 }
                                                                 else{
-                                                                    $message .= '<td style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.number_format($totalANet/$totalABirds, 2, '.', '').'</td>';
+                                                                    $message .= '<td style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">' . ($totalABirds > 0 ? number_format($totalANet / $totalABirds, 2, '.', '') : '0.00') . '</td>';
                                                                 }
                                                                 
                                                                 if($totalBirds <= 0){
                                                                     $message .= '<td style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">0.00</td>';
                                                                 }
                                                                 else{
-                                                                    $message .= '<td style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.number_format($totalNet/$totalBirds, 2, '.', '').'</td>';
+                                                                    $message .= '<td style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">' . ($totalBirds > 0 ? number_format($totalNet / $totalBirds, 2, '.', '') : '0.00') . '</td>';
                                                                 }
                                                             $message.= '</tr>
                                                             <tr>
@@ -773,7 +773,7 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                                                     }
 
                                                                     $nettsIn = $grossIn - $taresIn;
-                                                                    $average = $nettsIn / $birdsIn;
+                                                                    $average = $birdsIn > 0 ? ($nettsIn / $birdsIn) : 0;
                                                                     $message .= '<tr>
                                                                         <td style="width: 28%;border-top:0px;padding: 0 0.7rem;font-size: 12px;font-family: sans-serif;font-weight: bold;text-align: center;">'.$group.'</td>
                                                                         <td style="width: 25%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.$crateIn.'</td>
@@ -1264,8 +1264,8 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                                     </td>
                                                     <td style="width: 30%;border-top:0px;padding: 0 0.7rem;">
                                                         <p>
-                                                            <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Total Count&nbsp;&nbsp;&nbsp;&nbsp;: </span>
-                                                            <span style="font-size: 12px;font-family: sans-serif;">'.$totalCrates.'</span>
+                                                            <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Group Count&nbsp;: </span>
+                                                            <span style="font-size: 12px;font-family: sans-serif;">'.$groupCrates.'</span>
                                                         </p>
                                                     </td>
                                                     <td style="width: 40%;border-top:0px;padding: 0 0.7rem;">
@@ -1285,7 +1285,7 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                                     <td style="width: 30%;border-top:0px;padding: 0 0.7rem;">
                                                         <p>
                                                             <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Crate Wt (kg) : </span>
-                                                            <span style="font-size: 12px;font-family: sans-serif;">'.(string)number_format(($totalCrate / $totalCrates), 2).'</span>
+                                                            <span style="font-size: 12px;font-family: sans-serif;">'.($totalCrates > 0 ? (string)number_format($totalCrate / $totalCrates, 2) : '0.00').'</span>
                                                         </p>
                                                     </td>
                                                     <td style="width: 40%;border-top:0px;padding: 0 0.7rem;">
@@ -1433,7 +1433,7 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                                                     }
                                                                     else{
                                                                         $groupSNet = $groupSGross - $groupSCrate;
-                                                                        $message .= '<td style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.number_format($groupSNet/$groupSBirds, 2, '.', '').'</td>';
+                                                                        $message .= '<td style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">' . ($groupSBirds > 0 ? number_format($groupSNet / $groupSBirds, 2, '.', '') : '0.00') . '</td>';
                                                                     }
                                                                     
                                                                     if($groupABirds <= 0){
@@ -1441,14 +1441,14 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                                                     }
                                                                     else{
                                                                         $groupANet = $groupAGross - $groupACrate;
-                                                                        $message .= '<td style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.number_format($groupANet/$groupABirds, 2, '.', '').'</td>';
+                                                                        $message .= '<td style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">' . ($groupABirds > 0 ? number_format($groupANet / $groupABirds, 2, '.', '') : '0.00') . '</td>';
                                                                     }
                                                                     
                                                                     if($groupBirds <= 0){
                                                                         $message .= '<td style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">0.00</td>';
                                                                     }
                                                                     else{
-                                                                        $message .= '<td style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">'.number_format($groupNet/$groupBirds, 2, '.', '').'</td>';
+                                                                        $message .= '<td style="width: 20%;border-top:0px;padding: 0 0.7rem;border: 1px solid #000000;font-size: 12px;font-family: sans-serif;text-align: center;">' . ($groupBirds > 0 ? number_format($groupNet / $groupBirds, 2, '.', '') : '0.00') . '</td>';
                                                                     }
                                                                 $message.= '</tr>
                                                                 <tr>

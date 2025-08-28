@@ -506,7 +506,7 @@ if(isset($_GET['userID'], $_GET['printType'])){
                                         </tr>
                                         <tr>
                                             <td style="text-align: center;font-size: 14px;"><b>Avg. Bird Wt.</b></td>
-                                            <td style="text-align: center;font-size: 14px;">'.number_format((($totalWeight - $totalCrate)/$totalBirds), 2, '.', '').'</td>
+                                            <td style="text-align: center;font-size: 14px;">'.($totalBirds > 0 ? number_format(($totalWeight - $totalCrate) / $totalBirds, 2, '.', '') : '0.00').'</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -1216,7 +1216,7 @@ if(isset($_GET['userID'], $_GET['printType'])){
                                             </tr>
                                             <tr>
                                                 <td style="text-align: center;font-size: 14px;"><b>Avg. Bird Wt.</b></td>
-                                                <td style="text-align: center;font-size: 14px;">'.number_format(($groupNet/$groupBirds), 2, '.', '').'</td>
+                                                <td style="text-align: center;font-size: 14px;">'.($groupBirds > 0 ? number_format($groupNet / $groupBirds, 2, '.', '') : '0.00').'</td>
                                             </tr>
                                         </tbody>
                                     </table>
