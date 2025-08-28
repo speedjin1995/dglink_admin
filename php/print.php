@@ -1264,8 +1264,8 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                                     </td>
                                                     <td style="width: 30%;border-top:0px;padding: 0 0.7rem;">
                                                         <p>
-                                                            <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Total Count&nbsp;&nbsp;&nbsp;&nbsp;: </span>
-                                                            <span style="font-size: 12px;font-family: sans-serif;">'.$totalCrates.'</span>
+                                                            <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Group Count&nbsp;: </span>
+                                                            <span style="font-size: 12px;font-family: sans-serif;">'.$groupCrates.'</span>
                                                         </p>
                                                     </td>
                                                     <td style="width: 40%;border-top:0px;padding: 0 0.7rem;">
