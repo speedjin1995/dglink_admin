@@ -1050,11 +1050,8 @@ if(isset($_GET['ids'], $_GET['printType'])) {
 
                         // Generate separate pages for each group
                         $groupNumber = 0;
-                        for($groupIndex = 0; $groupIndex < count($mapOfWeights); $groupIndex++){
-                            $group = $mapOfWeights[$groupIndex];
+                        foreach ($mapOfWeights as $groupIndex => $group) {
                             $groupNumber++;
-                            
-                            // Calculate group-specific totals
                             $groupCrates = 0;
                             $groupBirds = 0;
                             $groupGross = 0.0;
@@ -1074,11 +1071,6 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                             $groupMaleBirds = 0;
                             $groupFemaleBirds = 0;
                             $groupMixedBirds = 0;
-                            $groupTotalSGross = 0.0;
-                            $groupTotalAGross = 0.0;
-                            $groupTotalGross = 0.0;
-                            $groupTotalSCrate = 0.0;
-                            $groupTotalACrate = 0.0;
                             $groupMapOfBirdsToCages = array();
                             $groupArray3 = array(); 
 
@@ -1392,7 +1384,7 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                             <tbody>
                                                 <tr>
                                                     <td style="width: 50%;border-top:0px;">
-                                                        <p style="font-size: 12px;font-family: sans-serif;"><b>GROUP '.$groupNumber.' SUMMARY</b></p>
+                                                        <p style="font-size: 12px;font-family: sans-serif;"><b>SUMMARY - GROUP ' . $groupNumber . '</b></p>
                                                         <table class="table" style="width: 95%">
                                                             <tbody>
                                                                 <tr>
@@ -1487,7 +1479,7 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                                         </table>';
                                                         $message .= '</td>
                                                     <td style="width: 50%;border-top:0px;">
-                                                        <p style="font-size: 12px;font-family: sans-serif;"><b>GROUP '.$groupNumber.' - BY HOUSE</b></p>
+                                                        <p style="font-size: 12px;font-family: sans-serif;"><b>SUMMARY - BY HOUSE (GROUP ' . $groupNumber . ')</b></p>
                                                         <div style="width:50%; padding-left: 100px;">
                                                             <table class="table" style="width: 50%">
                                                                 <tbody>
@@ -1615,23 +1607,8 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                                 </td>';
                                                 
                                                 foreach ($house['weightList'] as $element) {
-                                                    if($newRow){
-                                                        $indexString .= '<tr><td style="border-top:0px;padding: 0 0.7rem;">
-                                                            <p>
-                                                                <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">' . $indexCount2 . '</span>
-                                                            </p>
-                                                        </td>';
-                                                        $indexCount2 += 10;
-                                                        $indexString .= '<td style="border-top:0px;padding: 0 0.7rem;">
-                                                            <p>
-                                                                <span style="font-size: 12px;font-family: sans-serif;">' . $oldWeight . '</span>
-                                                            </p>
-                                                        </td>';
-                                                        $count++;
-                                                    }
-                                                    
                                                     if ($count < 10) {
-                                                        $indexString .= '<td style="border-top:0px;padding: 0 0.7rem;">
+                                                        $indexString .= '<td style="border-top:0px;padding: 0 0.7rem;width: 10%;">
                                                             <p>
                                                                 <span style="font-size: 12px;font-family: sans-serif;">' . $element['grossWeight'] . '/' . $element['numberOfBirds'] . '</span>
                                                             </p>
@@ -1644,6 +1621,18 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                                         $count = 0;
                                                         $newRow = true;
                                                         $oldWeight = $element['grossWeight'] . '/' . $element['numberOfBirds'];
+                                                        $indexString .= '<tr><td style="border-top:0px;padding: 0 0.7rem;width: 20%;">
+                                                            <p>
+                                                                <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">' . $indexCount2 . '</span>
+                                                            </p>
+                                                        </td>';
+                                                        $indexCount2 += 10;
+                                                        $indexString .= '<td style="border-top:0px;padding: 0 0.7rem;width: 10%;">
+                                                            <p>
+                                                                <span style="font-size: 12px;font-family: sans-serif;">' . $oldWeight . '</span>
+                                                            </p>
+                                                        </td>';
+                                                        $count++;
                                                     }
                                                 }
                                 
