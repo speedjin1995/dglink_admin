@@ -1728,7 +1728,7 @@ if(isset($_GET['userID'], $_GET['printType'])){
 
             // Add page content for this group
             $message .= '<div id="container">
-                        <p style="margin: 0px;"><u style="color: blue;">Group No. ' . $group['groupNumber'] . '</u></p>';
+                        <p style="margin: 0px;"><u style="color: blue;">Group No. ' . $groupNumber . '</u></p>';
 
             if (isset($group['houses']) && is_array($group['houses'])) {
                 foreach ($group['houses'] as $house) {
