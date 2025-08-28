@@ -318,6 +318,26 @@ if(isset($_GET['userID'], $_GET['printType'])){
                         color: #000;
                         display: inline;
                     }
+
+                    .group-container {
+                        break-inside: avoid;
+                        page-break-inside: avoid;
+                        margin-bottom: 5px;
+                    }
+
+                    .house-container {
+                        margin-bottom: 5px;
+                    }
+
+                    .house-table {
+                        break-inside: auto;
+                    }
+
+                    /* Ensure group stays together but allow page breaks between groups */
+                    .group-container + .group-container {
+                        break-before: auto;
+                        page-break-before: auto;
+                    }
                     
                     table {
                         width: 100%;
@@ -816,17 +836,18 @@ if(isset($_GET['userID'], $_GET['printType'])){
                         </table>
                     </div>
 
-                    <div id="page-content">';
-                    
+                    <div class="page-content">';
                         if (!empty($mapOfWeights)) {
                             foreach ($mapOfWeights as $group) {
-                                $message .= '<p class="keep-with-next" style="margin: 0px;"><u style="color: blue;">Group No. ' . $group['groupNumber'] . '</u></p>';
+                                // Wrap entire group (including all houses) in avoid-break container
+                                $message .= '<div class="avoid-break group-container">';
+                                $message .= '<p style="margin: 0px;"><u style="color: blue;">Group No. ' . $group['groupNumber'] . '</u></p>';
                         
                                 if (isset($group['houses']) && is_array($group['houses'])) {
                                     foreach ($group['houses'] as $house) {
-                                        $message .= '<div class="avoid-break">';
+                                        $message .= '<div class="house-container">';
                                         $message .= '<p style="margin: 0px;">House ' . $house['house'] . '</p>';
-                                        $message .= '<table class="table avoid-break">';
+                                        $message .= '<table class="table house-table">';
                                         $message .= '<tbody>';
                                         $message .= '<tr  style="border-top: 1px solid #000000;border-bottom: 1px solid #000000;font-family: sans-serif;">';
                                         $message .= '<td style="width: 20%;border-top:0px;padding: 0 0.7rem;"><p>
@@ -841,11 +862,9 @@ if(isset($_GET['userID'], $_GET['printType'])){
                         
                                         $count = 0;
                                         $newRow = false;
-                                        $reachNewPage = false;
-                                        $totalCount = 0;
                                         $indexCount2 = 11;
                                         $oldWeight = "";
-                                        $indexString = '<tr><td style="border-top:0px;padding: 0 0.7rem;width: 20%;">
+                                        $indexString = '<tr><td style="border-top:0px;padding: 0 0.7rem;">
                                             <p>
                                                 <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">1</span>
                                             </p>
@@ -862,7 +881,7 @@ if(isset($_GET['userID'], $_GET['printType'])){
                                                 $newRow = false;
                                             }
                                             else {
-                                                $indexString .= '</tr>'; // Move this line outside of the else block
+                                                $indexString .= '</tr>';
                                                 $count = 0;
                                                 $newRow = true;
                                                 $oldWeight = $element['grossWeight'] . '/' . $element['numberOfBirds'];
@@ -878,45 +897,28 @@ if(isset($_GET['userID'], $_GET['printType'])){
                                                     </p>
                                                 </td>';
                                                 $count++;
-                                                //$noOfRows+=10;
                                             }
-                                            
-                                            /*if($noOfRows >= 150){
-                                                $reachNewPage = true;
-                                                break;
-                                            }*/
-                                            
-                                            $totalCount++;
                                         }
-                                        
-                                        /*if($reachNewPage){
-                                            break;
-                                        }*/
                         
                                         if ($count > 0) {
                                             for ($k = 0; $k < (10 - $count); $k++) {
                                                 $indexString .= '<td style="border-top:0px;padding: 0 0.7rem;width: 10%;"><p><span style="font-size: 12px;font-family: sans-serif;"></span></p></td>';
                                             }
                                             $indexString .= '</tr>';
-                                            //$noOfRows++;
                                         }
-                                        
-                                        /*($noOfRows >= 150){
-                                            break;
-                                        }*/
                         
                                         $message .= $indexString;
                                         $message .= '</tbody></table><br>';
-                                        $message .= '</div>';
+                                        $message .= '</div>'; // Close house-container
                                     }
                                 }
-                        
-                                //$message .= '</div><br>';
+                                
+                                $message .= '</div>'; // Close group-container (avoid-break)
                             }
                         }
                     
-                    $message .= '
-                    </div>
+                    $message .= 
+                    '</div>
                 </section>
             </body>
         </html>';
