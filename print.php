@@ -1270,16 +1270,17 @@ if(isset($_GET['userID'], $_GET['printType'])){
                 }
                 
                 if($element['birdsPerCages'] != null){
-                        $keyB = array_search($element['birdsPerCages'], $groupArray3);
+                    $keyB = array_search($element['birdsPerCages'], $groupArray3);
                 }
                 else{
-                        $birdsPerCages = (string)((int)$element['numberOfBirds'] / (int)$element['numberOfCages']);
-                        $keyB = array_search($birdsPerCages, $groupArray3);
+                    $birdsPerCages = (string)((int)$element['numberOfBirds'] / (int)$element['numberOfCages']);
+                    $keyB = array_search($birdsPerCages, $groupArray3);
                 }
                 
                 $groupMapOfBirdsToCages[$keyB]['count'] += (int)$element['numberOfCages'];
 
             }
+
             $groupNet = $groupGross - $groupTare;
 
             // Start new page section
@@ -1470,6 +1471,59 @@ if(isset($_GET['userID'], $_GET['printType'])){
                                 </td>
                             </tr>
                         </tbody>
+                    </table>
+
+                    <table class="table" style="margin-bottom: 10px;">
+                        <tbody>
+                            <tr style="border-top: 1px solid #000000;border-bottom: 1px solid #000000;font-family: sans-serif;">
+                                <td style="width: 20%;border-top:0px;padding: 0 0.7rem;">
+                                    <p>
+                                        <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Crate No.  </span>
+                                    </p>
+                                </td>
+                                <td colspan="10" style="width: 80%;border-top:0px;padding: 0 0.7rem;">
+                                    <p>
+                                        <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Weight (kg) / Sample Crate </span>
+                                    </p>
+                                </td>
+                            </tr>';
+                            
+                            $countCage = 1;
+                            $indexCount2 = 11;
+                            $indexStringCage = '<tr><td style="border-top:0px;padding: 0 0.7rem;width: 20%;">
+                                <p>
+                                    <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">1</span>
+                                </p>
+                            </td>';
+                            
+                            foreach ($cage_data as $cage) {
+                                if ($countCage < 10) {
+                                    $indexStringCage .= '<td style="border-top:0px;padding: 0 0.7rem;width: 10%;">
+                                        <p>
+                                            <span style="font-size: 12px;font-family: sans-serif;">' . str_replace('kg', '', $cage['data']) .  '/' . $cage['number'] . '</span>
+                                        </p>
+                                    </td>';
+                                    $countCage++;
+                                }
+                                else {
+                                    $indexStringCage .= '<td style="border-top:0px;padding: 0 0.7rem;width: 10%;">
+                                        <p>
+                                            <span style="font-size: 12px;font-family: sans-serif;">' . str_replace('kg', '', $cage['data']) . '/' . $cage['number'] . '</span>
+                                        </p>
+                                    </td></tr>'; // Move this line outside of the else block
+                                    $countCage = 1;
+                                }
+                            }
+            
+                            if ($countCage > 0) {
+                                for ($k = 0; $k <= (10 - $countCage); $k++) {
+                                    $indexStringCage .= '<td style="border-top:0px;padding: 0 0.7rem;width: 10%;"><p><span style="font-size: 12px;font-family: sans-serif;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p></td>';
+                                }
+                                $indexStringCage .= '</tr>';
+                            }
+            
+                            $message .= $indexStringCage;
+                        $message .= '</tbody>
                     </table>
                 </div>';
 
@@ -1674,60 +1728,7 @@ if(isset($_GET['userID'], $_GET['printType'])){
 
             // Add page content for this group
             $message .= '<div id="container">
-                            <table class="table" style="margin-bottom: 10px;">
-                                <tbody>
-                                    <tr style="border-top: 1px solid #000000;border-bottom: 1px solid #000000;font-family: sans-serif;">
-                                        <td style="width: 20%;border-top:0px;padding: 0 0.7rem;">
-                                            <p>
-                                                <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Crate No.  </span>
-                                            </p>
-                                        </td>
-                                        <td colspan="10" style="width: 80%;border-top:0px;padding: 0 0.7rem;">
-                                            <p>
-                                                <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">Weight (kg) / Sample Crate </span>
-                                            </p>
-                                        </td>
-                                    </tr>';
-                                    
-                                    $countCage = 1;
-                                    $indexCount2 = 11;
-                                    $indexStringCage = '<tr><td style="border-top:0px;padding: 0 0.7rem;width: 20%;">
-                                        <p>
-                                            <span style="font-size: 12px;font-family: sans-serif;font-weight: bold;">1</span>
-                                        </p>
-                                    </td>';
-                                    
-                                    foreach ($cage_data as $cage) {
-                                        if ($countCage < 10) {
-                                            $indexStringCage .= '<td style="border-top:0px;padding: 0 0.7rem;width: 10%;">
-                                                <p>
-                                                    <span style="font-size: 12px;font-family: sans-serif;">' . str_replace('kg', '', $cage['data']) .  '/' . $cage['number'] . '</span>
-                                                </p>
-                                            </td>';
-                                            $countCage++;
-                                        }
-                                        else {
-                                            $indexStringCage .= '<td style="border-top:0px;padding: 0 0.7rem;width: 10%;">
-                                                <p>
-                                                    <span style="font-size: 12px;font-family: sans-serif;">' . str_replace('kg', '', $cage['data']) . '/' . $cage['number'] . '</span>
-                                                </p>
-                                            </td></tr>'; // Move this line outside of the else block
-                                            $countCage = 1;
-                                        }
-                                    }
-                    
-                                    if ($countCage > 0) {
-                                        for ($k = 0; $k <= (10 - $countCage); $k++) {
-                                            $indexStringCage .= '<td style="border-top:0px;padding: 0 0.7rem;width: 10%;"><p><span style="font-size: 12px;font-family: sans-serif;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p></td>';
-                                        }
-                                        $indexStringCage .= '</tr>';
-                                    }
-                    
-                                    $message .= $indexStringCage;
-                                $message .= '</tbody>
-                            </table>
-            ';
-            $message .= '<p style="margin: 0px;"><u style="color: blue;">Group No. ' . $group['groupNumber'] . '</u></p>';
+                        <p style="margin: 0px;"><u style="color: blue;">Group No. ' . $group['groupNumber'] . '</u></p>';
 
             if (isset($group['houses']) && is_array($group['houses'])) {
                 foreach ($group['houses'] as $house) {
