@@ -1060,7 +1060,9 @@ if(isset($_GET['ids'], $_GET['printType'])){
                                 </div>
                             ';
 
-                            $message .= '<table class="table-bordered"><tbody>';
+                            $message .= '
+                                <p style="margin: 0px;"><u style="color: blue;">Group No. ' . $mapOfWeights[$j]['groupNumber'] . '</u></p>
+                            <table class="table-bordered"><tbody>';
                             $count = 1;
                             $rows = 1;
                             $rowCount = 0;
