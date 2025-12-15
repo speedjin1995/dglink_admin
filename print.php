@@ -161,7 +161,6 @@ function rearrangeList($weightDetails) {
     // Now you can work with $mapOfWeights and the calculated totals as needed.
 }
 
-
 if(isset($_GET['userID'], $_GET['printType'])){
     $id = $_GET['userID'];
     $printType = $_GET['printType'];
@@ -1587,7 +1586,7 @@ if(isset($_GET['userID'], $_GET['printType'])){
                         <tbody>
                             <tr>
                                 <td style="width: 50%;border-top:0px;">
-                                    <p style="font-size: 12px;font-family: sans-serif;"><b>SUMMARY - GROUP ' . $groupNumber . '</b></p>
+                                    <p style="font-size: 12px;font-family: sans-serif;"><b>SUMMARY - GROUP ' . $group['groupNumber'] . '</b></p>
                                     <table class="table" style="width: 95%">
                                         <tbody>
                                             <tr>
@@ -1682,7 +1681,7 @@ if(isset($_GET['userID'], $_GET['printType'])){
                                     </table>
                                 </td>
                                 <td style="width: 50%;border-top:0px;">
-                                    <p style="font-size: 12px;font-family: sans-serif;"><b>SUMMARY - BY HOUSE (GROUP ' . $groupNumber . ')</b></p>
+                                    <p style="font-size: 12px;font-family: sans-serif;"><b>SUMMARY - BY HOUSE (GROUP ' . $group['groupNumber'] . ')</b></p>
                                         <div style="width:50%; padding-left: 100px;">
                                             <table class="table" style="width: 50%">
                                                 <tbody>
@@ -1780,7 +1779,7 @@ if(isset($_GET['userID'], $_GET['printType'])){
 
             // Add page content for this group
             $message .= '<div id="container">
-                        <p style="margin: 0px;"><u style="color: blue;">Group No. ' . $groupNumber . '</u></p>';
+                        <p style="margin: 0px;"><u style="color: blue;">Group No. ' . $group['groupNumber'] . '</u></p>';
 
             if (isset($group['houses']) && is_array($group['houses'])) {
                 foreach ($group['houses'] as $house) {

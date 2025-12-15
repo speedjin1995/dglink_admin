@@ -1428,7 +1428,7 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                             <tbody>
                                                 <tr>
                                                     <td style="width: 50%;border-top:0px;">
-                                                        <p style="font-size: 12px;font-family: sans-serif;"><b>SUMMARY - GROUP ' . $groupNumber . '</b></p>
+                                                        <p style="font-size: 12px;font-family: sans-serif;"><b>SUMMARY - GROUP ' . $group['groupNumber'] . '</b></p>
                                                         <table class="table" style="width: 95%">
                                                             <tbody>
                                                                 <tr>
@@ -1523,7 +1523,7 @@ if(isset($_GET['ids'], $_GET['printType'])) {
                                                         </table>';
                                                         $message .= '</td>
                                                     <td style="width: 50%;border-top:0px;">
-                                                        <p style="font-size: 12px;font-family: sans-serif;"><b>SUMMARY - BY HOUSE (GROUP ' . $groupNumber . ')</b></p>
+                                                        <p style="font-size: 12px;font-family: sans-serif;"><b>SUMMARY - BY HOUSE (GROUP ' . $group['groupNumber'] . ')</b></p>
                                                         <div style="width:50%; padding-left: 100px;">
                                                             <table class="table" style="width: 50%">
                                                                 <tbody>
