@@ -944,8 +944,9 @@ if(isset($_GET['userID'], $_GET['printType'])){
         </head><body>';
 
         // Create separate page for each group (similar to the other print.php)
+        $groupNumber = 0;
         for ($j = 0; $j < count($mapOfWeights); $j++) {
-            $groupNumber = $mapOfWeights[$j]['groupNumber'];
+            $groupNumber++;
             $groupWeightData = $mapOfWeights[$j]['weightList'];
             
             // Calculate group totals
@@ -1248,7 +1249,7 @@ if(isset($_GET['userID'], $_GET['printType'])){
 
             // Add page content for this group
             $message .= '<div id="container">';
-            $message .= '<p style="margin: 0px;"><u style="color: blue;">Group No. ' . $groupNumber . '</u></p>';
+            $message .= '<p style="margin: 0px;"><u style="color: blue;">Group No. ' . $mapOfWeights[$j]['groupNumber'] . '</u></p>';
             $message .= '<table class="table-bordered"><tbody>';
 
             $count = 1;

@@ -889,8 +889,10 @@ if(isset($_GET['ids'], $_GET['printType'])){
                         }
 
                         // Generate separate pages for each group with paged.js
+                        $groupNumber = 0;
                         for ($j = 0; $j < count($mapOfWeights); $j++) {
                             // Calculate group-specific totals
+                            $groupNumber++;
                             $groupWeightData = $mapOfWeights[$j]['weightList'];
                             $groupTotalGross = 0;
                             $groupTotalCrate = 0;
@@ -981,7 +983,7 @@ if(isset($_GET['ids'], $_GET['printType'])){
                                                 <td style="vertical-align: top; text-align: right;border-top: 0px;">
                                                     <p style="margin-left: 50px;">
                                                         <span style="font-size: 20px; font-weight: bold;">DELIVERY ORDER</span><br>
-                                                    <span style="font-size: 14px; font-weight: bold; color: blue;">Group ' . $mapOfWeights[$j]['groupNumber'] . ' of ' . count($mapOfWeights) . '</span>    
+                                                    <span style="font-size: 14px; font-weight: bold; color: blue;">Group ' . $groupNumber . ' of ' . count($mapOfWeights) . '</span>    
                                                     </p>
                                                 </td>
                                             </tr>
