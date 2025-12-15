@@ -5,6 +5,15 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 session_start();
 $post = json_decode(file_get_contents('php://input'), true);
 
+$services = 'Save_Vehicle';
+$requests = json_encode($post);
+
+// Log API request
+$stmtL = $db->prepare("INSERT INTO api_requests (services, request) VALUES (?, ?)");
+$stmtL->bind_param('ss', $services, $requests);
+$stmtL->execute();
+$invid = $stmtL->insert_id;
+
 if(isset($post['staffName'], $post['customer'])){
 	$staffName = $post['staffName'];
 	$customer = $post['customer'];

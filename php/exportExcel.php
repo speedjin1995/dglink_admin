@@ -3,22 +3,163 @@
 require_once 'db_connect.php';
 session_start();
 
-if(isset($_GET['parent']) &&$_GET['parent'] != null && $_GET['parent'] != ''){
-    $company = $_GET['parent'];
-}
-else{
-    $company = $_SESSION['customer'];
-}
-
-// Filter the excel data 
 function filterData(&$str){ 
     $str = preg_replace("/\t/", "\\t", $str); 
     $str = preg_replace("/\r?\n/", "\\n", $str); 
     if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"'; 
 } 
- 
-// Excel file name for download 
-$fileName = "Weight-data_" . date('Y-m-d') . ".xls";
+
+if(isset($_GET['id']) &&$_GET['id'] != null && $_GET['id'] != ''){
+    $id = $_GET['id'];
+    $excelData = "";
+    $fileName = "Weight-data_" . $id . ".xls";
+    
+    // Fetch records from database
+    $query = $db->query("select * FROM weighing WHERE id='".$id."'");
+    
+    if($query->num_rows > 0){ 
+        // Output each row of the data 
+        $row = $query->fetch_assoc();
+        $farm = '';
+        $issuedBy = '';
+        $fileName = "Weight-data_" . $row['po_no'] . ".xls";
+        
+        if ($update_stmt2 = $db->prepare("SELECT * FROM farms WHERE id=?")) {
+            $update_stmt2->bind_param('s', $row['farm_id']);
+        
+            // Execute the prepared query.
+            if ($update_stmt2->execute()) {
+                $result2 = $update_stmt2->get_result();
+                
+                if ($row1 = $result2->fetch_assoc()) {
+                    $farm = $row1['name'];
+                }
+            }
+        }
+        
+        if ($update_stmt = $db->prepare("SELECT * FROM users WHERE id=?")) {
+            $update_stmt->bind_param('s', json_decode($row['weighted_by'], true)[0]);
+        
+            // Execute the prepared query.
+            if ($update_stmt->execute()) {
+                $result = $update_stmt->get_result();
+                
+                if ($rowr = $result->fetch_assoc()) {
+                    $issuedBy = $rowr['name'];
+                }
+            }
+        }
+
+        // ================================
+        // ✅ SECTION 1 — HEADER (MATCH IMAGE)
+        // ================================
+        $excelData .= "SERIAL_NO\tDO_NO\tISSUED_BY\tDATE_TIME\tCUSTOMER\tLORRY_NO\tAVG_CRATE_WEIGHT\tDRIVER\tDRIVER2\tATTENDANT_1\tATTENDANT_2\tFARM\tREMARK\n";
+    
+        $headerRow = [
+            $row['serial_no'],
+            $row['po_no'],
+            $issuedBy,
+            $row['booking_date'],
+            $row['customer'],
+            $row['lorry_no'],
+            $row['average_cage'],
+            $row['driver_name'],
+            $row['driver_name2'],
+            $row['follower1'],
+            $row['follower2'],
+            $farm,
+            $row['remark']
+        ];
+    
+        array_walk($headerRow, 'filterData');
+        $excelData .= implode("\t", $headerRow) . "\n\n";
+    
+    
+        // ================================
+        // ✅ SECTION 2 — CAGE DATA
+        // ================================
+        $excelData .= "CRATE_NO\tDATE_TIME\tNET\tUNIT\tCRATE\n";
+    
+        $cageData = json_decode($row['cage_data'], true);
+        if (is_array($cageData)) {
+            $i = 1;
+            foreach ($cageData as $cage) {
+    
+                preg_match('/([\d.]+)([a-zA-Z]+)/', $cage['data'], $match);
+                $net = $match[1] ?? 0;
+                $unit = $match[2] ?? 'kg';
+    
+                $cageRow = [
+                    $i,
+                    $row['booking_date'],
+                    $net,
+                    $unit,
+                    $cage['number'],
+                    ''
+                ];
+    
+                array_walk($cageRow, 'filterData');
+                $excelData .= implode("\t", $cageRow) . "\n";
+    
+                $i++;
+            }
+        }
+    
+        $excelData .= "\n";
+    
+        // ================================
+        // ✅ SECTION 3 — WEIGHT DATA
+        // ================================
+        $excelData .= "WEIGHT_NO\tDATE_TIME\tGROSS\tCRATE\tNET\tUNIT\tNO_OF_CRATES\tBIRD_PER_CAGE\tBIRDS\tGENDER\tGRADE\tHOUSE_NO\tGROUP_NO\n";
+    
+        $timestampData = json_decode($row['weight_time'], true);
+        $weightData = json_decode($row['weight_data'], true);
+        if (is_array($weightData)) {
+            $i = 1;
+            foreach ($weightData as $w) {
+    
+                $weightRow = [
+                    $i,
+                    "'" . $timestampData[$i-1],
+                    $w['grossWeight'],
+                    $w['tareWeight'],
+                    $w['netWeight'],
+                    'kg',
+                    $w['numberOfCages'],
+                    $w['birdsPerCages'],
+                    $w['numberOfBirds'],
+                    strtoupper($w['sex']),
+                    $w['grade'],
+                    $w['houseNumber'],
+                    $w['groupNumber']
+                ];
+    
+                array_walk($weightRow, 'filterData');
+                $excelData .= implode("\t", $weightRow) . "\n";
+    
+                $i++;
+            }
+        }
+    }else{ 
+        $excelData .= 'No records found...'. "\n"; 
+    } 
+    
+    // Headers for download 
+    header("Content-Type: application/vnd.ms-excel"); 
+    header("Content-Disposition: attachment; filename=\"$fileName\""); 
+     
+    // Render excel data 
+    echo $excelData; 
+     
+    exit;
+}
+else{
+    echo "<script>
+            alert('Invalid request: No ID provided!');
+            window.history.back();
+          </script>";
+    exit;
+}
  
 // Column names 
 $fields = array('SERIAL NO', 'ORDER NO', 'BOOKING DATE TIME', 'CUSTOMER', 'PRODUCT NO', 'VEHICLE NO', 'DRIVER NAME', 'FARM', 'WEIGHTED BY', 'START WEIGHT DATE', 'END WEIGHT DATE', 

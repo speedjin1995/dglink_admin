@@ -323,7 +323,7 @@ $(function () {
         {
           data: 'id',
           render: function (data, type, row) {
-            return '<div class="row"><div class="col-3"><button type="button" id="print' + data + '" onclick="print('+data+');" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div><div class="col-3"><button type="button" id="print2' + data + '" onclick="portrait('+ data + ');" class="btn btn-success btn-sm"><i class="fas fa-receipt"></i></button></div><div class="col-3"></div><div class="col-3"></div></div>';
+            return '<div class="row"><div class="col-3"><button type="button" id="print' + data + '" onclick="print('+data+');" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div><div class="col-3"><button type="button" id="print2' + data + '" onclick="portrait('+ data + ');" class="btn btn-warning btn-sm"><i class="fas fa-receipt"></i></button></div><div class="col-3"><button type="button" id="excel' + data + '" onclick="excel('+ data + ');" class="btn btn-success btn-sm"><i class="fas fa-file-excel"></i></button></div><div class="col-3"></div></div>';
           }
         }
       /*{ 
@@ -415,7 +415,7 @@ $(function () {
         {
           data: 'id',
           render: function (data, type, row) {
-            return '<div class="row"><div class="col-3"><button type="button" id="print' + data + '" onclick="print('+data+');" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div><div class="col-3"><button type="button" id="print2' + data + '" onclick="portrait('+ data + ');" class="btn btn-success btn-sm"><i class="fas fa-receipt"></i></button></div><div class="col-3"></div><div class="col-3"></div></div>';
+            return '<div class="row"><div class="col-3"><button type="button" id="print' + data + '" onclick="print('+data+');" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div><div class="col-3"><button type="button" id="print2' + data + '" onclick="portrait('+ data + ');" class="btn btn-success btn-sm"><i class="fas fa-receipt"></i></button></div><div class="col-3"><button type="button" id="excel' + data + '" onclick="excel('+ data + ');" class="btn btn-success btn-sm"><i class="fas fa-file-excel"></i></button></div><div class="col-3"></div></div>';
           }
         }
       ],
@@ -824,5 +824,9 @@ function portrait(id) {
   //     toastr["error"]("Something wrong when activate", "Failed:");
   //   }
   // });
+}
+
+function excel(id) {
+    window.open("php/exportExcel.php?id="+id);
 }
 </script>

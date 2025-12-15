@@ -28,7 +28,7 @@ if(($row = $result->fetch_assoc()) !== null){
 	
 	if($password == $row['password']){
 	    // Check for active device_id
-        if ($row['device_id'] != null && $row['device_id'] != $deviceId) { // Replace 'your_current_device_id_placeholder' with the actual device ID of the current login attempt
+        if ($row['device_id'] != null && $row['device_id'] != $deviceId && $row['username'] != 'playstoredemo') { // Replace 'your_current_device_id_placeholder' with the actual device ID of the current login attempt
             $response = json_encode(
                 array(
                     "status" => "failed",
