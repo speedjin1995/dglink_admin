@@ -94,11 +94,25 @@ try {
         }
 
         // Check duplicate
-        $select_stmt2 = $db->prepare("SELECT COUNT(*) AS cnt FROM weighing WHERE start_time = ? AND weighted_by = ? AND farm_id = ?");
+        /*$select_stmt2 = $db->prepare("SELECT COUNT(*) AS cnt FROM weighing WHERE start_time = ? AND weighted_by = ? AND farm_id = ?");
         $select_stmt2->bind_param('sss', $startTime, $weighted_by, $farmId);
         $select_stmt2->execute();
         $row = $select_stmt2->get_result()->fetch_assoc();
-        $insert = ((int)$row['cnt'] === 0);
+        $insert = ((int)$row['cnt'] === 0);*/
+        
+        $select_stmt2 = $db->prepare("
+            SELECT id, serial_no 
+            FROM weighing 
+            WHERE start_time = ? 
+              AND weighted_by = ? 
+              AND farm_id = ?
+            LIMIT 1
+        ");
+        $select_stmt2->bind_param('sss', $startTime, $weighted_by, $farmId);
+        $select_stmt2->execute();
+        $existingRow = $select_stmt2->get_result()->fetch_assoc();
+        
+        $exists = ($existingRow !== null);
 
         $data = json_encode($weightDetails);
         $data2 = json_encode($timestampData);
@@ -131,7 +145,7 @@ try {
             ]);
         } else {
             // 🧭 Insert new
-            if ($insert) {
+            if (!$exists) {
                 $insert_stmt = $db->prepare("INSERT INTO weighing 
                     (serial_no, customer, supplier, product, driver_name, lorry_no, farm_id, 
                     average_cage, average_bird, minimum_weight, maximum_weight, weight_data, 
@@ -157,9 +171,16 @@ try {
                     "weightId" => $id
                 ]);
             } else {
-                $response = json_encode([
+                /*$response = json_encode([
                     "status" => "failed",
                     "message" => "Duplicate entry detected (same start time / user / farm)"
+                ]);*/
+                $response = json_encode([
+                    "status"   => "success",
+                    "message"  => "Already exists",
+                    "serialNo" => $existingRow['serial_no'],
+                    "weightId" => $existingRow['id'],
+                    "duplicate" => true
                 ]);
             }
         }
